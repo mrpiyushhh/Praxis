@@ -7,10 +7,13 @@ const User = require('../models/User');
 // Register a new user
 router.post('/signup', async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password } = req.body || {};
+    const missing = ['name', 'email', 'password'].filter((field) => !req.body?.[field]);
 
-    if (!name || !email || !password) {
-      return res.status(400).json({ message: 'Not all fields have been entered.' });
+    if (missing.length > 0) {
+      return res.status(400).json({
+        message: `Missing fields: ${missing.join(', ')}. In Postman use Body → raw → JSON (not Text or form-data).`
+      });
     }
 
     const existingUser = await User.findOne({ email });
@@ -52,10 +55,13 @@ router.post('/signup', async (req, res) => {
 // Login user
 router.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.body || {};
+    const missing = ['email', 'password'].filter((field) => !req.body?.[field]);
 
-    if (!email || !password) {
-      return res.status(400).json({ message: 'Not all fields have been entered.' });
+    if (missing.length > 0) {
+      return res.status(400).json({
+        message: `Missing fields: ${missing.join(', ')}. In Postman use Body → raw → JSON (not Text or form-data).`
+      });
     }
 
     const user = await User.findOne({ email });
