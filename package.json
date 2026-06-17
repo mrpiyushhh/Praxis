@@ -1,0 +1,25 @@
+{
+  "name": "praxis",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A beautiful, modern task manager inspired by Greek philosophy — *Praxis* (πρᾶξις) means “action” or “practice.”",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"vite\" \"cd server && npm run dev\"",
+    "dev:frontend": "vite",
+    "dev:backend": "cd server && npm run dev",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^10.5.0",
+    "concurrently": "^9.1.2",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^3.4.19",
+    "vite": "^8.0.14"
+  }
+}
+

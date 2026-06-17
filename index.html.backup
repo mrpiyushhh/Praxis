@@ -1,0 +1,2169 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Praxis | Action, Refined</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container-lowest": "#0b0e14",
+            "on-primary": "#3c0091",
+            "surface-variant": "#32353c",
+            "on-error-container": "#ffdad6",
+            "on-surface": "#e1e2eb",
+            "tertiary-container": "#00a38d",
+            "primary-fixed-dim": "#d0bcff",
+            "surface-tint": "#d0bcff",
+            "surface-container": "#1d2026",
+            "secondary": "#a5e7ff",
+            "on-background": "#e1e2eb",
+            "tertiary": "#00dfc1",
+            "outline": "#958ea0",
+            "tertiary-fixed": "#26fedc",
+            "on-surface-variant": "#cbc3d7",
+            "secondary-fixed-dim": "#47d6ff",
+            "outline-variant": "#494454",
+            "primary-fixed": "#e9ddff",
+            "inverse-primary": "#6d3bd7",
+            "on-secondary-fixed": "#001f28",
+            "background": "#10131a",
+            "on-secondary-container": "#00566a",
+            "surface-container-low": "#191c22",
+            "on-primary-container": "#340080",
+            "surface-container-high": "#272a31",
+            "on-secondary-fixed-variant": "#004e60",
+            "on-primary-fixed": "#23005c",
+            "on-primary-fixed-variant": "#5516be",
+            "on-tertiary-fixed": "#00201a",
+            "error": "#ffb4ab",
+            "on-secondary": "#003543",
+            "secondary-container": "#00d2ff",
+            "surface-dim": "#10131a",
+            "on-tertiary-fixed-variant": "#005144",
+            "on-error": "#690005",
+            "surface": "#10131a",
+            "on-tertiary-container": "#003028",
+            "surface-bright": "#363940",
+            "on-tertiary": "#00382f",
+            "inverse-on-surface": "#2e3037",
+            "tertiary-fixed-dim": "#00dfc1",
+            "secondary-fixed": "#b6ebff",
+            "inverse-surface": "#e1e2eb",
+            "primary-container": "#a078ff",
+            "error-container": "#93000a",
+            "primary": "#d0bcff",
+            "surface-container-highest": "#32353c"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter": "24px",
+            "container-padding-mobile": "16px",
+            "stack-sm": "8px",
+            "container-padding-desktop": "32px",
+            "stack-md": "16px",
+            "base": "8px",
+            "stack-lg": "24px"
+          },
+          "fontFamily": {
+            "label-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-md": ["Lexend"],
+            "body-sm": ["Inter"],
+            "headline-lg-mobile": ["Lexend"],
+            "label-sm": ["Inter"],
+            "headline-xl": ["Lexend"],
+            "headline-sm": ["Lexend"],
+            "body-lg": ["Inter"],
+            "headline-lg": ["Lexend"]
+          },
+          "fontSize": {
+            "label-lg": ["14px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+            "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+            "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+            "label-sm": ["12px", {"lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+            "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+            "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+            "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+          },
+          "animation": {
+            "fade-up": "fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards",
+            "pulse-slow": "pulseSlow 12s ease-in-out infinite",
+            "glow": "glow 2s ease-in-out infinite alternate"
+          },
+          "keyframes": {
+            "fadeUp": {
+              "0%": { opacity: "0", transform: "translateY(20px)" },
+              "100%": { opacity: "1", transform: "translateY(0)" }
+            },
+            "pulseSlow": {
+              "0%, 100%": { transform: "scale(1) translate(0, 0)", opacity: "0.15" },
+              "50%": { transform: "scale(1.1) translate(2%, 2%)", opacity: "0.25" }
+            },
+            "glow": {
+              "from": { "box-shadow": "0 0 10px rgba(208, 188, 255, 0.2)" },
+              "to": { "box-shadow": "0 0 20px rgba(208, 188, 255, 0.5)" }
+            }
+          }
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      background-color: #10131a;
+      color: #e1e2eb;
+      overflow-x: hidden;
+      position: relative;
+    }
+    /* Animated background mesh */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 10% 20%, rgba(109, 59, 215, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(0, 210, 255, 0.15) 0%, transparent 40%);
+      z-index: -1;
+      pointer-events: none;
+      animation: pulseSlow 15s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulseSlow {
+      0% { opacity: 0.8; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .glass-card {
+      background: rgba(29, 32, 38, 0.4);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease, box-shadow 0.4s ease;
+    }
+    .glass-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 12px 48px 0 rgba(0, 0, 0, 0.3);
+    }
+
+    .sidebar-glass {
+      background: rgba(16, 19, 26, 0.6);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .kinetic-gradient {
+      background: linear-gradient(135deg, #a078ff 0%, #00d2ff 100%);
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      font-size: 24px;
+    }
+
+    .stagger-1 { animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both; }
+    .stagger-2 { animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both; }
+    .stagger-3 { animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both; }
+    .stagger-4 { animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.4s both; }
+
+    .focus-ring-animate:focus-within {
+      box-shadow: 0 0 0 2px rgba(208, 188, 255, 0.3);
+      transform: scale(1.005);
+    }
+
+    /* Scrollbars */
+    .sidebar-scroll {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.1) transparent;
+    }
+    .task-list {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.08) transparent;
+    }
+
+    .fun-confetti {
+      position: fixed;
+      z-index: 99999;
+      pointer-events: none;
+    }
+
+    /* Preserve some original interactive styles */
+    .task-row {
+      transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+    .task-row:hover {
+      background-color: rgba(255,255,255, 0.03);
+    }
+    .priority-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: transform 0.1s ease;
+    }
+    .priority-dot:hover { transform: scale(1.3); }
+    .modal {
+      animation: modalPop 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    @keyframes modalPop {
+      from { opacity: 0; transform: scale(0.96) translateY(8px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .lumina-gradient {
+      background: linear-gradient(135deg, #a078ff, #00d2ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* ==================== AUTH SCREEN STYLES ==================== */
+    .auth-screen {
+      background: #10131a;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .auth-card {
+      background: rgba(29, 32, 38, 0.75);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.5);
+    }
+
+    .auth-input {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.2s ease;
+    }
+    .auth-input:focus {
+      border-color: rgba(208, 188, 255, 0.4);
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 0 0 3px rgba(208, 188, 255, 0.08);
+      outline: none;
+    }
+
+    .auth-tab {
+      position: relative;
+      padding-bottom: 10px;
+      font-weight: 600;
+      color: #a1a7b8;
+      transition: color 0.2s ease;
+    }
+    .auth-tab.active {
+      color: #e1e2eb;
+    }
+    .auth-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(to right, #a078ff, #00d2ff);
+      border-radius: 2px;
+    }
+
+    .auth-error {
+      color: #ff8a80;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body class="font-body-md text-body-md text-on-surface bg-background">
+  <!-- ==================== AUTH SCREEN ==================== -->
+  <div id="auth-screen" class="auth-screen hidden">
+    <div class="w-full max-w-[420px] px-6">
+      <!-- Logo -->
+      <div class="flex justify-center mb-8">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-2xl kinetic-gradient flex items-center justify-center shadow-lg shadow-primary/30">
+            <span class="material-symbols-outlined text-on-primary text-3xl font-bold">bolt</span>
+          </div>
+          <div>
+            <span class="font-headline-lg text-headline-lg tracking-tighter">Praxis</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Auth Card -->
+      <div class="auth-card rounded-3xl p-9">
+        <!-- Tabs -->
+        <div class="flex mb-8 border-b border-white/10">
+          <button onclick="showAuthTab('login')" id="auth-tab-login"
+                  class="auth-tab flex-1 text-center pb-3 text-base active">Log in</button>
+          <button onclick="showAuthTab('signup')" id="auth-tab-signup"
+                  class="auth-tab flex-1 text-center pb-3 text-base">Sign up</button>
+        </div>
+
+        <!-- Login Form -->
+        <div id="auth-login-form">
+          <div class="space-y-5">
+            <div>
+              <label class="block text-xs font-semibold text-on-surface-variant/70 tracking-wider mb-2">EMAIL</label>
+              <input id="login-email" type="email" class="auth-input w-full rounded-2xl px-5 py-3.5 text-base" 
+                     placeholder="you@example.com" autocomplete="email">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-on-surface-variant/70 tracking-wider mb-2">PASSWORD</label>
+              <input id="login-password" type="password" class="auth-input w-full rounded-2xl px-5 py-3.5 text-base" 
+                     placeholder="••••••••" autocomplete="current-password">
+            </div>
+          </div>
+
+          <button onclick="handleLogin()" 
+                  class="mt-8 w-full kinetic-gradient text-on-primary font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.985] transition-all">
+            Log in
+            <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+          </button>
+
+          <div class="mt-5 text-center">
+            <button onclick="handleGuestLogin()" 
+                    class="text-sm text-on-surface-variant/70 hover:text-on-surface transition-colors underline decoration-white/20">
+              Continue as Guest
+            </button>
+          </div>
+        </div>
+
+        <!-- Signup Form -->
+        <div id="auth-signup-form" class="hidden">
+          <div class="space-y-5">
+            <div>
+              <label class="block text-xs font-semibold text-on-surface-variant/70 tracking-wider mb-2">FULL NAME</label>
+              <input id="signup-name" type="text" class="auth-input w-full rounded-2xl px-5 py-3.5 text-base" 
+                     placeholder="Alex Rivera" autocomplete="name">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-on-surface-variant/70 tracking-wider mb-2">EMAIL</label>
+              <input id="signup-email" type="email" class="auth-input w-full rounded-2xl px-5 py-3.5 text-base" 
+                     placeholder="you@example.com" autocomplete="email">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-on-surface-variant/70 tracking-wider mb-2">PASSWORD</label>
+              <input id="signup-password" type="password" class="auth-input w-full rounded-2xl px-5 py-3.5 text-base" 
+                     placeholder="Create a password">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-on-surface-variant/70 tracking-wider mb-2">CONFIRM PASSWORD</label>
+              <input id="signup-confirm" type="password" class="auth-input w-full rounded-2xl px-5 py-3.5 text-base" 
+                     placeholder="Confirm password">
+            </div>
+          </div>
+
+          <button onclick="handleSignup()" 
+                  class="mt-8 w-full kinetic-gradient text-on-primary font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.985] transition-all">
+            Create Account
+          </button>
+
+          <div class="mt-5 text-center">
+            <button onclick="handleGuestLogin()" 
+                    class="text-sm text-on-surface-variant/70 hover:text-on-surface transition-colors underline decoration-white/20">
+              Continue as Guest
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <p class="text-center text-[11px] text-on-surface-variant/40 mt-6 tracking-wider">
+        Your data stays private on this device
+      </p>
+    </div>
+  </div>
+
+  <!-- Fixed Sidebar -->
+  <aside class="w-[280px] h-screen fixed left-0 top-0 sidebar-glass flex flex-col py-stack-lg z-50">
+    <div class="px-6 mb-8">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl kinetic-gradient flex items-center justify-center shadow-lg shadow-primary/20">
+          <span class="material-symbols-outlined text-on-primary font-bold">bolt</span>
+        </div>
+        <div>
+          <h1 class="font-headline-md text-headline-md font-bold tracking-tight text-on-surface leading-none">Praxis</h1>
+          <p class="text-label-sm font-label-sm text-on-surface-variant/60 uppercase tracking-widest mt-1">Action, refined.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Projects Section -->
+    <div class="px-4 mb-4">
+      <div class="px-4 flex items-center justify-between mb-3">
+        <h2 class="text-[10px] font-bold text-on-surface-variant/40 uppercase tracking-[0.2em]">Projects</h2>
+        <span id="project-count" class="ml-1 bg-white/5 border border-white/10 px-1.5 py-0.5 rounded text-[9px] font-mono">0</span>
+      </div>
+      <nav id="project-list" 
+           class="space-y-1 px-1 sidebar-scroll max-h-[calc(100vh-320px)] overflow-y-auto"
+           ondragover="event.preventDefault()"
+           ondrop="handleProjectListDrop(event)">
+        <!-- Populated by JS -->
+      </nav>
+    </div>
+
+    <!-- New Project Button -->
+    <div class="mt-auto px-6">
+      <button onclick="showNewProjectModal()"
+              class="w-full bg-white text-surface py-3 rounded-xl font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 hover:bg-white/90 active:scale-95 transition-all shadow-xl shadow-black/20 hover:scale-[1.02] hover:brightness-110 duration-200">
+        <span class="material-symbols-outlined text-[20px]">add</span>
+        New Project
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="ml-[280px] min-h-screen">
+    <!-- Top Bar / Header -->
+    <header class="h-16 flex items-center justify-between px-6 border-b border-white/5 bg-transparent backdrop-blur-sm">
+      <div class="flex items-center gap-3">
+        <div id="top-project-color" class="w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_8px_rgba(208,188,255,0.8)] hidden"></div>
+        <h2 id="current-project-name" onclick="renameCurrentProject()" 
+            class="font-headline-md text-headline-md text-on-surface cursor-pointer hover:text-primary transition-colors">
+          Select a project
+        </h2>
+      </div>
+      <div id="top-actions" class="hidden">
+        <button onclick="deleteCurrentProject()" 
+                class="flex items-center gap-2 text-on-surface-variant/60 hover:text-error transition-colors text-label-sm group">
+          <span class="material-symbols-outlined text-[18px] group-hover:rotate-12 transition-transform">delete</span>
+          Delete project
+        </button>
+      </div>
+    </header>
+
+    <div class="p-6 max-w-[1400px] mx-auto space-y-5">
+      <!-- Statistics Row -->
+      <div class="grid grid-cols-12 gap-5" id="stats-row">
+        <!-- Populated by JS renderStats() -->
+      </div>
+
+      <!-- Task Input Area -->
+      <div class="glass-card rounded-3xl p-4 space-y-3 stagger-4 focus-ring-animate" id="task-input-card">
+        <div class="bg-white/5 border border-white/5 rounded-3xl p-5 min-h-[96px] transition-all duration-300 focus-within:bg-white/[0.08] focus-within:border-white/10">
+          <textarea id="new-task-input" 
+                    class="w-full bg-transparent border-none focus:ring-0 text-[15px] text-on-surface placeholder:text-on-surface-variant/30 resize-none p-0"
+                    placeholder="What needs to get done?"
+                    onkeydown="if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); addNewTask(); }"></textarea>
+        </div>
+        <div class="flex items-center justify-between pt-1">
+          <div class="flex items-center gap-3">
+            <!-- Deadline Button -->
+            <button onclick="openDatePicker()" 
+                    class="flex items-center gap-2 px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-label-lg text-on-surface-variant hover:text-on-surface hover:bg-white/10 hover:scale-[1.02] transition-all">
+              <span class="material-symbols-outlined text-[20px]">calendar_today</span>
+              <span id="new-task-deadline-display">Add deadline</span>
+            </button>
+
+            <!-- Priority Pills -->
+            <div class="flex items-center gap-1 bg-white/5 border border-white/10 rounded-xl p-1">
+              <button onclick="setNewTaskPriority('high')" id="prio-high"
+                      class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-wider text-on-surface-variant/60 hover:text-error transition-colors">
+                <span class="w-1.5 h-1.5 rounded-full bg-on-surface-variant/30"></span>
+                High
+              </button>
+              <button onclick="setNewTaskPriority('medium')" id="prio-medium"
+                      class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-wider text-on-surface-variant/60 hover:text-secondary transition-colors">
+                <span class="w-1.5 h-1.5 rounded-full bg-on-surface-variant/30"></span>
+                Med
+              </button>
+              <button onclick="setNewTaskPriority('low')" id="prio-low"
+                      class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-wider text-tertiary bg-tertiary/10 border border-tertiary/20">
+                <span class="w-1.5 h-1.5 rounded-full bg-tertiary shadow-[0_0_6px_rgba(0,223,193,0.8)]"></span>
+                Low
+              </button>
+            </div>
+          </div>
+
+          <button onclick="addNewTask()" 
+                  class="kinetic-gradient text-on-primary font-bold px-8 py-3 rounded-2xl flex items-center gap-2 hover:brightness-110 hover:scale-[1.05] hover:shadow-[0_0_25px_rgba(208,188,255,0.4)] active:scale-95 transition-all shadow-lg shadow-primary/20">
+            Add
+            <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Active Tasks Header + Search -->
+      <div class="flex items-center justify-between px-1 pt-1">
+        <div class="flex items-center gap-2">
+          <h3 class="font-headline-sm text-headline-sm text-on-surface">Active</h3>
+          <span id="active-count" class="bg-white/10 backdrop-blur-md border border-white/10 px-2 py-0.5 rounded-full text-[10px] font-bold text-on-surface-variant/80">0</span>
+        </div>
+        <div class="relative w-72 focus-within:w-80 transition-all duration-500 ease-out">
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/40 scale-90">search</span>
+          <input id="search-input" type="text" 
+                 oninput="currentSearch = this.value; renderTasksOnly();"
+                 class="w-full bg-white/5 border border-white/10 backdrop-blur-xl rounded-full py-2.5 pl-10 pr-4 text-body-sm focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all placeholder:text-on-surface-variant/30 text-on-surface focus:bg-white/[0.08]"
+                 placeholder="Search active tasks..."/>
+        </div>
+      </div>
+
+      <!-- Tasks List Container (populated by JS) -->
+      <div id="task-list-container" 
+           class="glass-card rounded-[2.5rem] overflow-hidden border border-white/5 min-h-[320px]">
+        <!-- Populated dynamically by renderTasksList() -->
+      </div>
+    </div>
+  </main>
+
+  <!-- New Project Modal (refreshed) -->
+  <div id="new-project-modal" onclick="if (event.target.id === 'new-project-modal') hideNewProjectModal()" 
+       class="hidden fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center">
+    <div onclick="event.stopImmediatePropagation()" 
+         class="modal glass-card rounded-[2.5rem] w-full max-w-md p-9 shadow-2xl">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h3 class="font-headline-sm text-headline-sm">Create new project</h3>
+          <p class="text-on-surface-variant/60 text-sm mt-1">Give it a beautiful name</p>
+        </div>
+        <button onclick="hideNewProjectModal()" class="text-on-surface-variant/60 hover:text-on-surface text-2xl leading-none">×</button>
+      </div>
+
+      <div class="space-y-7">
+        <!-- Project Name -->
+        <div>
+          <label class="block text-xs font-semibold text-on-surface-variant/60 tracking-wider mb-2">PROJECT NAME</label>
+          <input id="project-name-input" type="text" 
+                 class="w-full bg-white/5 border border-white/10 focus:border-primary rounded-2xl px-5 py-4 text-lg placeholder:text-on-surface-variant/40"
+                 placeholder="Website redesign" autocomplete="off" onkeydown="if (event.key === 'Enter') createProjectFromModal()">
+        </div>
+
+        <!-- Color Picker -->
+        <div>
+          <label class="block text-xs font-semibold text-on-surface-variant/60 tracking-wider mb-3">ACCENT COLOR</label>
+          <div id="color-swatches" class="flex flex-wrap gap-3">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-3 mt-9">
+        <button onclick="hideNewProjectModal()" 
+                class="flex-1 py-3.5 rounded-2xl text-sm font-semibold border border-white/10 hover:bg-white/5 transition-colors">
+          Cancel
+        </button>
+        <button onclick="createProjectFromModal()" 
+                class="flex-1 py-3.5 rounded-2xl kinetic-gradient text-on-primary font-bold text-sm transition-all hover:brightness-110 active:scale-[0.985]">
+          Create Project
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Archive Modal -->
+  <div id="archive-modal" onclick="if (event.target.id === 'archive-modal') hideArchiveModal()" 
+       class="hidden fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center">
+    <div onclick="event.stopImmediatePropagation()" 
+         class="modal bg-slate-900 border border-slate-700 rounded-3xl w-full max-w-2xl max-h-[80vh] flex flex-col shadow-2xl">
+      <div class="flex items-center justify-between px-8 pt-7 pb-4 border-b border-slate-800">
+        <div>
+          <h3 class="font-semibold text-2xl tracking-tight">Archive</h3>
+          <p id="archive-count" class="text-slate-400 text-sm">0 tasks</p>
+        </div>
+        <button onclick="hideArchiveModal()" class="text-slate-500 hover:text-slate-300 transition-colors text-xl leading-none">×</button>
+      </div>
+
+      <div id="archive-list" class="flex-1 overflow-auto p-3 text-sm">
+        <!-- Populated by JS -->
+      </div>
+
+      <div class="p-4 border-t border-slate-800 text-xs text-slate-500 px-8">
+        Archived tasks are removed from the active list. You can restore or delete them permanently.
+      </div>
+    </div>
+  </div>
+
+  <!-- Date Picker Modal -->
+  <div id="date-picker-modal" onclick="if (event.target.id === 'date-picker-modal') closeDatePicker()" 
+       class="hidden fixed inset-0 bg-black/70 backdrop-blur-md z-[60] flex items-center justify-center">
+    <div onclick="event.stopImmediatePropagation()" 
+         class="modal bg-slate-900 border border-slate-700 rounded-3xl w-full max-w-[320px] shadow-2xl overflow-hidden">
+      
+      <!-- Header -->
+      <div class="flex items-center justify-between px-5 py-4 border-b border-slate-800">
+        <div class="flex items-center gap-2">
+          <button onclick="prevMonth()" class="w-9 h-9 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-colors">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+          <button onclick="nextMonth()" class="w-9 h-9 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-colors">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+        
+        <div onclick="goToToday()" class="font-semibold text-lg cursor-pointer hover:text-indigo-400 transition-colors" id="calendar-month-year">
+          <!-- JS populated -->
+        </div>
+
+        <button onclick="closeDatePicker()" class="text-slate-400 hover:text-white w-9 h-9 flex items-center justify-center text-xl leading-none">×</button>
+      </div>
+
+      <!-- Weekday headers -->
+      <div class="grid grid-cols-7 text-center text-[11px] font-medium text-slate-400 px-4 pt-4">
+        <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
+      </div>
+
+      <!-- Calendar Grid -->
+      <div id="calendar-grid" class="grid grid-cols-7 gap-1 p-4 text-sm">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- Footer -->
+      <div class="flex items-center justify-between border-t border-slate-800 px-5 py-3 bg-slate-950">
+        <button onclick="selectToday()" 
+                class="text-sm px-4 py-2 rounded-xl hover:bg-slate-800 transition-colors text-indigo-400 font-medium">
+          Today
+        </button>
+        <button onclick="clearSelectedDate()" 
+                class="text-sm px-4 py-2 rounded-xl hover:bg-slate-800 transition-colors text-rose-400">
+          Clear
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Tailwind script
+    function initTailwind() {
+      document.documentElement.style.setProperty('--accent', '#6366f1');
+    }
+
+    // Color palette (beautiful modern colors)
+    const PROJECT_COLORS = [
+      '#6366f1', // Indigo
+      '#a855f7', // Purple
+      '#ec4899', // Pink
+      '#f43f5e', // Rose
+      '#f97316', // Orange
+      '#eab308', // Yellow
+      '#22c55e', // Green
+      '#14b8a6', // Teal
+      '#06b6d4', // Cyan
+      '#3b82f6', // Blue
+    ];
+
+    // App state
+    let state = {
+      projects: [],
+      tasks: {}   // { projectId: [task, ...] }
+    };
+    let currentProjectId = null;
+    let currentSearch = '';
+    let selectedColor = PROJECT_COLORS[0];
+
+    // ==================== AUTH SYSTEM ====================
+    let currentUser = null; // { id, name, email } or null (guest)
+
+    function getUsers() {
+      try {
+        return JSON.parse(localStorage.getItem('praxis-users') || '[]');
+      } catch {
+        return [];
+      }
+    }
+
+    function saveUsers(users) {
+      localStorage.setItem('praxis-users', JSON.stringify(users));
+    }
+
+    function hashPassword(password) {
+      // Simple hash for demo purposes only (not secure for production)
+      return btoa(unescape(encodeURIComponent(password + 'praxis-salt-2025')));
+    }
+
+    function getCurrentUser() {
+      const userId = localStorage.getItem('praxis-current-user-id');
+      if (!userId) return null;
+
+      if (userId === 'guest') {
+        return { id: 'guest', name: 'Guest', email: null };
+      }
+
+      const users = getUsers();
+      return users.find(u => u.id === userId) || null;
+    }
+
+    function setCurrentUser(userId) {
+      if (userId) {
+        localStorage.setItem('praxis-current-user-id', userId);
+      } else {
+        localStorage.removeItem('praxis-current-user-id');
+      }
+    }
+
+    function showAuthScreen() {
+      const authScreen = document.getElementById('auth-screen');
+      if (authScreen) authScreen.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function hideAuthScreen() {
+      const authScreen = document.getElementById('auth-screen');
+      if (authScreen) authScreen.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    function showAuthTab(tab) {
+      const loginForm = document.getElementById('auth-login-form');
+      const signupForm = document.getElementById('auth-signup-form');
+      const loginTab = document.getElementById('auth-tab-login');
+      const signupTab = document.getElementById('auth-tab-signup');
+
+      if (tab === 'login') {
+        loginForm.classList.remove('hidden');
+        signupForm.classList.add('hidden');
+        loginTab.classList.add('active');
+        signupTab.classList.remove('active');
+      } else {
+        loginForm.classList.add('hidden');
+        signupForm.classList.remove('hidden');
+        loginTab.classList.remove('active');
+        signupTab.classList.add('active');
+      }
+    }
+
+    function handleSignup() {
+      const name = document.getElementById('signup-name').value.trim();
+      const email = document.getElementById('signup-email').value.trim().toLowerCase();
+      const password = document.getElementById('signup-password').value;
+      const confirm = document.getElementById('signup-confirm').value;
+
+      // Basic validation
+      if (!name || !email || !password) {
+        alert('Please fill in all fields');
+        return;
+      }
+      if (password.length < 6) {
+        alert('Password must be at least 6 characters');
+        return;
+      }
+      if (password !== confirm) {
+        alert('Passwords do not match');
+        return;
+      }
+
+      const users = getUsers();
+
+      // Check if email already exists
+      if (users.some(u => u.email === email)) {
+        alert('An account with this email already exists');
+        return;
+      }
+
+      // Create new user
+      const newUser = {
+        id: 'user_' + Date.now(),
+        name: name,
+        email: email,
+        passwordHash: hashPassword(password),
+        createdAt: new Date().toISOString()
+      };
+
+      users.push(newUser);
+      saveUsers(users);
+
+      // Log the user in immediately
+      currentUser = { id: newUser.id, name: newUser.name, email: newUser.email };
+      setCurrentUser(newUser.id);
+
+      // Initialize empty data for this user
+      saveUserData(newUser.id, { projects: [], tasks: {} });
+
+      hideAuthScreen();
+      initAppAfterAuth();
+    }
+
+    function handleLogin() {
+      const email = document.getElementById('login-email').value.trim().toLowerCase();
+      const password = document.getElementById('login-password').value;
+
+      if (!email || !password) {
+        alert('Please enter your email and password');
+        return;
+      }
+
+      const users = getUsers();
+      const user = users.find(u => u.email === email);
+
+      if (!user || user.passwordHash !== hashPassword(password)) {
+        alert('Invalid email or password');
+        return;
+      }
+
+      currentUser = { id: user.id, name: user.name, email: user.email };
+      setCurrentUser(user.id);
+
+      hideAuthScreen();
+      initAppAfterAuth();
+    }
+
+    function handleGuestLogin() {
+      currentUser = { id: 'guest', name: 'Guest', email: null };
+      setCurrentUser('guest');
+
+      // Make sure guest has data structure
+      if (!getUserData('guest')) {
+        saveUserData('guest', { projects: [], tasks: {} });
+      }
+
+      hideAuthScreen();
+      initAppAfterAuth();
+    }
+
+    function logout() {
+      if (!confirm('Log out of Praxis?')) return;
+
+      currentUser = null;
+      setCurrentUser(null);
+
+      // Clear current app state
+      state = { projects: [], tasks: {} };
+      currentProjectId = null;
+      currentSearch = '';
+
+      // Show auth screen again
+      showAuthScreen();
+      showAuthTab('login');
+    }
+
+    // Per-user data storage
+    function getUserData(userId) {
+      try {
+        const key = userId === 'guest' ? 'praxis-guest-data' : `praxis-data-${userId}`;
+        return JSON.parse(localStorage.getItem(key) || 'null');
+      } catch {
+        return null;
+      }
+    }
+
+    function saveUserData(userId, data) {
+      const key = userId === 'guest' ? 'praxis-guest-data' : `praxis-data-${userId}`;
+      localStorage.setItem(key, JSON.stringify(data));
+    }
+
+    function loadUserData(userId) {
+      const data = getUserData(userId);
+      if (data) {
+        state = data;
+      } else {
+        state = { projects: [], tasks: {} };
+      }
+      currentProjectId = null;
+      currentSearch = '';
+    }
+
+    function saveCurrentUserData() {
+      if (!currentUser) return;
+      saveUserData(currentUser.id, state);
+    }
+
+    // Render user profile section in sidebar
+    function renderUserProfileInSidebar() {
+      const sidebar = document.querySelector('aside');
+      if (!sidebar || !currentUser) return;
+
+      // Remove old profile if exists
+      const oldProfile = document.getElementById('user-profile-section');
+      if (oldProfile) oldProfile.remove();
+
+      const profileHTML = `
+        <div id="user-profile-section" class="mt-auto border-t border-white/10 px-4 pt-4 pb-2">
+          <div class="flex items-center gap-3 px-3 py-2.5 rounded-2xl bg-white/5 border border-white/5">
+            <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-primary to-tertiary flex items-center justify-center text-on-primary text-sm font-bold flex-shrink-0">
+              ${currentUser.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="text-sm font-medium truncate">${currentUser.name}</div>
+              ${currentUser.email ? `<div class="text-[10px] text-on-surface-variant/50 truncate">${currentUser.email}</div>` : ''}
+            </div>
+            <button onclick="logout()" 
+                    class="text-on-surface-variant/50 hover:text-error p-1.5 transition-colors" title="Log out">
+              <span class="material-symbols-outlined text-xl">logout</span>
+            </button>
+          </div>
+        </div>
+      `;
+
+      // Insert before the "New Project" button area
+      const newProjectBtn = sidebar.querySelector('.mt-auto');
+      if (newProjectBtn) {
+        newProjectBtn.insertAdjacentHTML('beforebegin', profileHTML);
+      } else {
+        sidebar.insertAdjacentHTML('beforeend', profileHTML);
+      }
+    }
+
+    // Load from localStorage (now per-user)
+    function loadState() {
+      // This function is kept for backward compatibility during migration.
+      // Real loading now happens in loadUserData()
+      const saved = localStorage.getItem('praxis-state');
+      if (saved && !currentUser) {
+        try {
+          state = JSON.parse(saved);
+          if (!state.tasks) state.tasks = {};
+          Object.keys(state.tasks).forEach(pid => {
+            (state.tasks[pid] || []).forEach(t => {
+              if (typeof t.dueDate === 'undefined') t.dueDate = null;
+              if (!t.priority) t.priority = 'low';
+            });
+          });
+        } catch (e) {}
+      }
+    }
+
+    function saveState() {
+      // New behavior: save to current user's storage
+      if (currentUser) {
+        saveCurrentUserData();
+      } else {
+        // Fallback for very old sessions
+        localStorage.setItem('praxis-state', JSON.stringify(state));
+      }
+    }
+
+    function seedDemoData() {
+      const demoProject = {
+        id: 'proj_' + Date.now(),
+        name: 'Website Launch',
+        color: PROJECT_COLORS[0],
+        createdAt: new Date().toISOString()
+      };
+      
+      const today = new Date();
+      const demoTasks = [
+        { id: 't1', title: 'Finalize homepage hero copy', completed: false, priority: 'high', dueDate: new Date(today.getTime() + 1000*60*60*24*2).toISOString().split('T')[0], createdAt: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString() },
+        { id: 't2', title: 'QA all landing pages on mobile', completed: true, priority: 'medium', dueDate: null, createdAt: new Date(Date.now() - 1000 * 60 * 60 * 26).toISOString() },
+        { id: 't3', title: 'Write launch announcement email', completed: false, priority: 'medium', dueDate: new Date(today.getTime() + 1000*60*60*24*1).toISOString().split('T')[0], createdAt: new Date(Date.now() - 1000 * 60 * 60 * 47).toISOString() },
+        { id: 't4', title: 'Set up analytics events', completed: false, priority: 'low', dueDate: new Date(today.getTime() + 1000*60*60*24*5).toISOString().split('T')[0], createdAt: new Date(Date.now() - 1000 * 60 * 60 * 71).toISOString() },
+      ];
+
+      state.projects.push(demoProject);
+      state.tasks[demoProject.id] = demoTasks;
+      currentProjectId = demoProject.id;
+      saveState();
+    }
+
+    // Utility: format relative time
+    function timeAgo(dateStr) {
+      const date = new Date(dateStr);
+      const now = new Date();
+      const seconds = Math.floor((now - date) / 1000);
+      
+      if (seconds < 60) return 'just now';
+      if (seconds < 3600) return Math.floor(seconds / 60) + 'm ago';
+      if (seconds < 86400) return Math.floor(seconds / 3600) + 'h ago';
+      if (seconds < 172800) return 'yesterday';
+      return Math.floor(seconds / 86400) + 'd ago';
+    }
+
+    // Get tasks for current project (with filter + search)
+    // Get only active (non-completed) tasks, sorted by priority (high first) then nearest deadline
+    function getActiveTasksSorted(projectId) {
+      if (!projectId) return [];
+      let tasks = (state.tasks[projectId] || []).filter(t => !t.completed);
+
+      // Apply search
+      if (currentSearch) {
+        const q = currentSearch.toLowerCase();
+        tasks = tasks.filter(t => t.title.toLowerCase().includes(q));
+      }
+
+      const priorityOrder = { high: 3, medium: 2, low: 1 };
+
+      tasks.sort((a, b) => {
+        // 1. Highest priority first
+        const pa = priorityOrder[a.priority] || 1;
+        const pb = priorityOrder[b.priority] || 1;
+        if (pb !== pa) return pb - pa;
+
+        // 2. Then by nearest deadline (earliest first). Tasks without deadline go last
+        const da = a.dueDate ? new Date(a.dueDate) : null;
+        const db = b.dueDate ? new Date(b.dueDate) : null;
+
+        if (da && db) return da - db;
+        if (da) return -1;
+        if (db) return 1;
+
+        // 3. Finally by creation date (newer first for same priority)
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      });
+
+      return tasks;
+    }
+
+    function getArchivedTasks(projectId) {
+      if (!projectId) return [];
+      return (state.tasks[projectId] || []).filter(t => t.completed);
+    }
+
+    function formatDueDate(dueDateStr) {
+      if (!dueDateStr) return null;
+      const d = new Date(dueDateStr);
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      const diffDays = Math.round((d - today) / (1000 * 60 * 60 * 24));
+
+      if (diffDays < 0) return { text: 'Overdue', color: '#f43f5e', urgent: true };
+      if (diffDays === 0) return { text: 'Today', color: '#f59e0b', urgent: true };
+      if (diffDays === 1) return { text: 'Tomorrow', color: '#f59e0b', urgent: false };
+      return { text: d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }), color: '#64748b', urgent: false };
+    }
+
+    // Calculate progress
+    function getProjectProgress(projectId) {
+      const tasks = state.tasks[projectId] || [];
+      if (tasks.length === 0) return 0;
+      const done = tasks.filter(t => t.completed).length;
+      return Math.round((done / tasks.length) * 100);
+    }
+
+    // New beautiful stats row renderer (matches the new design)
+    function renderStats() {
+      const container = document.getElementById('stats-row');
+      if (!container || !currentProjectId) return;
+
+      const project = state.projects.find(p => p.id === currentProjectId);
+      const allTasks = state.tasks[currentProjectId] || [];
+      const progress = getProjectProgress(currentProjectId);
+      const completedCount = allTasks.filter(t => t.completed).length;
+      const archived = getArchivedTasks(currentProjectId);
+
+      const ringRadius = 40;
+      const ringCircumference = 2 * Math.PI * ringRadius;
+      const progressRingOffset = ringCircumference - (ringCircumference * progress / 100);
+
+      container.innerHTML = `
+        <!-- Progress Card -->
+        <div class="col-span-12 lg:col-span-8 glass-card rounded-3xl p-6 flex items-center justify-between relative overflow-hidden stagger-1">
+          <div class="space-y-1">
+            <p class="text-label-sm font-label-sm text-on-surface-variant/60 uppercase tracking-widest">Progress</p>
+            <div class="flex items-baseline gap-1">
+              <span class="text-5xl font-bold text-on-surface">${progress}</span>
+              <span class="text-2xl font-bold text-on-surface-variant/40">%</span>
+            </div>
+          </div>
+          <div class="relative w-24 h-24">
+            <svg class="w-full h-full -rotate-90">
+              <circle class="text-white/5" cx="48" cy="48" fill="transparent" r="${ringRadius}" stroke="currentColor" stroke-width="7"></circle>
+              <circle class="text-primary/40" cx="48" cy="48" fill="transparent" r="${ringRadius}" 
+                      stroke="currentColor" stroke-dasharray="${ringCircumference}" stroke-dashoffset="${progressRingOffset}" 
+                      stroke-linecap="round" stroke-width="7"></circle>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <span class="text-[9px] font-bold text-on-surface-variant/60">${completedCount}/${allTasks.length}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tasks Count Card -->
+        <div class="col-span-12 md:col-span-6 lg:col-span-2 glass-card rounded-3xl p-6 flex flex-col justify-between stagger-2">
+          <p class="text-label-sm font-label-sm text-on-surface-variant/60 uppercase tracking-widest">Tasks</p>
+          <div class="mt-3">
+            <div class="flex items-baseline gap-2">
+              <span class="text-4xl font-bold text-on-surface">${allTasks.length}</span>
+              <span class="text-label-sm text-on-surface-variant/60">total</span>
+            </div>
+            <p class="text-xs text-tertiary mt-0.5">${completedCount} archived</p>
+          </div>
+        </div>
+
+        <!-- Archive Card -->
+        <button onclick="showArchiveModal()" 
+                class="col-span-12 md:col-span-6 lg:col-span-2 glass-card rounded-3xl p-6 flex flex-col justify-between hover:border-white/15 transition-all text-left stagger-3">
+          <p class="text-label-sm font-label-sm text-on-surface-variant/60 uppercase tracking-widest">Archive</p>
+          <div class="mt-3">
+            <div class="flex items-baseline gap-2">
+              <span class="text-4xl font-bold text-on-surface">${archived.length}</span>
+              <span class="text-label-sm text-on-surface-variant/60">tasks</span>
+            </div>
+            <span class="material-symbols-outlined text-on-surface-variant/40 mt-0.5 text-xl">archive</span>
+          </div>
+        </button>
+      `;
+    }
+
+    // Render sidebar project list (new glass aesthetic)
+    function renderSidebar() {
+      const container = document.getElementById('project-list');
+      container.innerHTML = '';
+      
+      if (state.projects.length === 0) {
+        container.innerHTML = `
+          <div class="px-4 py-6 text-center">
+            <p class="text-xs text-on-surface-variant/50">No projects yet</p>
+          </div>
+        `;
+        document.getElementById('project-count').textContent = '0';
+        return;
+      }
+
+      state.projects.forEach(project => {
+        const taskCount = (state.tasks[project.id] || []).length;
+        const completed = (state.tasks[project.id] || []).filter(t => t.completed).length;
+        const isActive = project.id === currentProjectId;
+        
+        const el = document.createElement('div');
+        el.className = `flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer mx-1 group transition-all ${isActive ? 'bg-white/10 backdrop-blur-md border border-white/10' : 'hover:bg-white/5 hover:translate-x-0.5'}`;
+        
+        if (isActive) {
+          el.style.boxShadow = `0 0 15px rgba(208,188,255,0.15)`;
+        }
+        
+        el.draggable = true;
+        el.dataset.projectId = project.id;
+        
+        el.innerHTML = `
+          <div class="flex-1 min-w-0 flex items-center gap-3">
+            <span class="w-2 h-2 rounded-full flex-shrink-0 transition-transform group-hover:scale-125" 
+                  style="background-color: ${project.color}; box-shadow: ${isActive ? `0 0 8px ${project.color}` : 'none'}"></span>
+            <span class="font-label-lg text-label-lg truncate ${isActive ? 'text-primary font-semibold' : 'text-on-surface-variant/90'}">${project.name}</span>
+          </div>
+          ${taskCount > 0 ? `
+            <span class="text-[10px] font-mono px-2 py-px rounded-full bg-white/5 border border-white/10 text-on-surface-variant/70 group-hover:bg-white/10 transition-colors">
+              ${completed}/${taskCount}
+            </span>
+          ` : ''}
+        `;
+        
+        el.onclick = () => {
+          selectProject(project.id);
+        };
+        
+        // Drag and drop handlers
+        el.addEventListener('dragstart', handleProjectDragStart);
+        el.addEventListener('dragover', handleProjectDragOver);
+        el.addEventListener('dragleave', handleProjectDragLeave);
+        el.addEventListener('drop', handleProjectDrop);
+        el.addEventListener('dragend', handleProjectDragEnd);
+        
+        container.appendChild(el);
+      });
+      
+      document.getElementById('project-count').textContent = state.projects.length;
+    }
+
+    // New lightweight renderMain for the updated UI
+    function renderMain() {
+      if (!currentProjectId || !state.projects.find(p => p.id === currentProjectId)) {
+        // No project selected - show nice empty state in task area
+        const taskContainer = document.getElementById('task-list-container');
+        if (taskContainer) {
+          taskContainer.innerHTML = `
+            <div class="flex flex-col items-center justify-center text-center py-16 px-8">
+              <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center border border-white/10 mb-6">
+                <span class="material-symbols-outlined text-[32px] text-on-surface-variant/30">check_circle</span>
+              </div>
+              <h4 class="font-headline-md text-on-surface mb-2">No project selected</h4>
+              <p class="text-body-md text-on-surface-variant/60">Create or select a project to begin.</p>
+            </div>
+          `;
+        }
+        document.getElementById('top-actions').classList.add('hidden');
+        document.getElementById('top-project-color').classList.add('hidden');
+        document.getElementById('current-project-name').textContent = 'Select a project';
+        document.getElementById('stats-row').innerHTML = '';
+        return;
+      }
+
+      const project = state.projects.find(p => p.id === currentProjectId);
+
+      // Update header
+      document.getElementById('current-project-name').textContent = project.name;
+      document.getElementById('current-project-name').onclick = () => renameCurrentProject();
+      
+      const colorDot = document.getElementById('top-project-color');
+      colorDot.style.backgroundColor = project.color;
+      colorDot.classList.remove('hidden');
+      document.getElementById('top-actions').classList.remove('hidden');
+
+      // Render the beautiful new stats
+      renderStats();
+
+      // Reset search when switching projects
+      const searchInput = document.getElementById('search-input');
+      if (searchInput) searchInput.value = currentSearch;
+
+      // Render tasks into the new container
+      renderTasksList();
+
+      // Focus + priority + deadline sync
+      setTimeout(() => {
+        const input = document.getElementById('new-task-input');
+        if (input) input.focus();
+      }, 60);
+
+      window.newTaskPriority = window.newTaskPriority || 'low';
+      updatePriorityUI();
+      updateDeadlineDisplay();
+    }
+
+    // Lightweight task-only re-render (used by search)
+    function renderTasksOnly() {
+      renderTasksList();
+    }
+
+    let newTaskPriority = 'low';
+    let newTaskDueDate = null;   // temporary due date for the "Add Task" input bar
+
+    function updatePriorityUI() {
+      ['high', 'medium', 'low'].forEach(p => {
+        const el = document.getElementById('prio-' + p);
+        if (!el) return;
+
+        el.classList.remove('bg-tertiary/10', 'border', 'border-tertiary/20', 'text-tertiary', 'text-error', 'text-secondary');
+
+        if (p === newTaskPriority) {
+          if (p === 'high') {
+            el.classList.add('text-error', 'bg-white/10');
+          } else if (p === 'medium') {
+            el.classList.add('text-secondary', 'bg-white/10');
+          } else {
+            el.classList.add('text-tertiary', 'bg-tertiary/10', 'border', 'border-tertiary/20');
+          }
+        } else {
+          el.classList.add('text-on-surface-variant/60');
+        }
+      });
+    }
+
+    window.setNewTaskPriority = function(priority) {
+      newTaskPriority = priority;
+      updatePriorityUI();
+    };
+
+    function clearNewTaskDueDate(e) {
+      e.stopImmediatePropagation();
+      newTaskDueDate = null;
+      updateDeadlineDisplay();
+    }
+
+    // Updates the deadline text inside the new design button
+    function updateDeadlineDisplay() {
+      const display = document.getElementById('new-task-deadline-display');
+      if (!display) return;
+
+      if (newTaskDueDate) {
+        const formatted = formatDueDate(newTaskDueDate);
+        const text = formatted ? formatted.text : newTaskDueDate;
+        display.innerHTML = `${text} <span onclick="clearNewTaskDueDate(event)" class="ml-1 text-on-surface-variant/50 hover:text-error">×</span>`;
+        display.classList.add('!text-primary');
+      } else {
+        display.textContent = 'Add deadline';
+        display.classList.remove('!text-primary');
+      }
+    }
+
+    // ==================== CUSTOM DATE PICKER ====================
+    let calendarYear = new Date().getFullYear();
+    let calendarMonth = new Date().getMonth();
+
+    function openDatePicker() {
+      const modal = document.getElementById('date-picker-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+
+      // Initialize to current selected date or today
+      if (newTaskDueDate) {
+        const d = new Date(newTaskDueDate);
+        calendarYear = d.getFullYear();
+        calendarMonth = d.getMonth();
+      } else {
+        const today = new Date();
+        calendarYear = today.getFullYear();
+        calendarMonth = today.getMonth();
+      }
+
+      renderCalendar(calendarYear, calendarMonth);
+
+      // Close on Escape key
+      const escHandler = (e) => {
+        if (e.key === 'Escape') {
+          closeDatePicker();
+          document.removeEventListener('keydown', escHandler);
+        }
+      };
+      document.addEventListener('keydown', escHandler, { once: true });
+    }
+
+    function closeDatePicker() {
+      const modal = document.getElementById('date-picker-modal');
+      modal.classList.remove('flex');
+      modal.classList.add('hidden');
+    }
+
+    function renderCalendar(year, month) {
+      const grid = document.getElementById('calendar-grid');
+      const header = document.getElementById('calendar-month-year');
+      grid.innerHTML = '';
+
+      const date = new Date(year, month, 1);
+      const monthName = date.toLocaleString('default', { month: 'long' });
+      header.textContent = `${monthName} ${year}`;
+
+      const firstDay = date.getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const todayStr = new Date().toISOString().split('T')[0];
+
+      // Empty cells before first day
+      for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement('div');
+        empty.className = 'h-9';
+        grid.appendChild(empty);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dayStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        
+        const dayEl = document.createElement('div');
+        dayEl.className = `h-9 flex items-center justify-center rounded-xl cursor-pointer text-sm transition-all hover:bg-slate-800`;
+
+        // Today highlight
+        if (dayStr === todayStr) {
+          dayEl.classList.add('border', 'border-indigo-500', 'text-indigo-400');
+        }
+
+        // Selected date highlight
+        if (newTaskDueDate === dayStr) {
+          dayEl.classList.add('bg-indigo-600', 'text-white', 'font-semibold');
+        }
+
+        dayEl.textContent = day;
+        dayEl.onclick = () => selectDate(dayStr);
+
+        grid.appendChild(dayEl);
+      }
+    }
+
+    function selectDate(dateStr) {
+      newTaskDueDate = dateStr;
+      updateDeadlineDisplay();
+      closeDatePicker();
+    }
+
+    function prevMonth() {
+      calendarMonth--;
+      if (calendarMonth < 0) {
+        calendarMonth = 11;
+        calendarYear--;
+      }
+      renderCalendar(calendarYear, calendarMonth);
+    }
+
+    function nextMonth() {
+      calendarMonth++;
+      if (calendarMonth > 11) {
+        calendarMonth = 0;
+        calendarYear++;
+      }
+      renderCalendar(calendarYear, calendarMonth);
+    }
+
+    function selectToday() {
+      const today = new Date();
+      const dateStr = today.toISOString().split('T')[0];
+      selectDate(dateStr);
+    }
+
+    function clearSelectedDate() {
+      newTaskDueDate = null;
+      updateDeadlineDisplay();
+      closeDatePicker();
+    }
+
+    function goToToday() {
+      const today = new Date();
+      calendarYear = today.getFullYear();
+      calendarMonth = today.getMonth();
+      renderCalendar(calendarYear, calendarMonth);
+    }
+
+    // ==================== MOBILE SIDEBAR ====================
+    function toggleMobileSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      const isOpen = !sidebar.classList.contains('-translate-x-full');
+
+      if (isOpen) {
+        closeMobileSidebar();
+      } else {
+        sidebar.classList.remove('-translate-x-full');
+        backdrop.classList.remove('hidden');
+        backdrop.classList.add('block');
+      }
+    }
+
+    function closeMobileSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      if (sidebar) sidebar.classList.add('-translate-x-full');
+      if (backdrop) {
+        backdrop.classList.remove('block');
+        backdrop.classList.add('hidden');
+      }
+    }
+
+    // Auto-close mobile sidebar when resizing to desktop
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 1024) {
+        closeMobileSidebar();
+      }
+    });
+
+    function renderTasksList() {
+      const container = document.getElementById('task-list-container');
+      if (!container) return;
+      
+      const tasks = getActiveTasksSorted(currentProjectId);
+      container.innerHTML = '';
+
+      if (tasks.length === 0) {
+        container.innerHTML = `
+          <div class="px-8 py-16 flex flex-col items-center justify-center text-center">
+            <div class="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center border border-white/10 mb-5">
+              <span class="material-symbols-outlined text-[28px] text-on-surface-variant/40">check_circle</span>
+            </div>
+            <p class="text-on-surface-variant/70 text-[15px]">
+              ${currentSearch ? 'No matching active tasks' : 'All clear. Time for a new challenge?'}
+            </p>
+          </div>
+        `;
+        return;
+      }
+
+      // Update active count badge
+      const activeCountEl = document.getElementById('active-count');
+      if (activeCountEl) activeCountEl.textContent = tasks.length;
+
+      tasks.forEach((task, index) => {
+        const taskEl = document.createElement('div');
+        taskEl.className = `task-row group flex items-center gap-4 px-6 py-4 border-b border-white/5 last:border-none hover:bg-white/[0.025]`;
+        taskEl.draggable = true;
+        taskEl.dataset.taskId = task.id;
+        taskEl.dataset.index = index;
+
+        const priorityColor = 
+          task.priority === 'high' ? '#ff8a80' : 
+          task.priority === 'medium' ? '#ffd54f' : '#69f0ae';
+
+        const due = formatDueDate(task.dueDate);
+        const dueBadge = due 
+          ? `<span onclick="editTaskDueDate('${task.id}', event); event.stopImmediatePropagation();" 
+                   class="font-medium px-3 py-px rounded-full text-[10px] cursor-pointer" 
+                   style="background:${due.color}15; color:${due.color}">${due.text}</span>` 
+          : '';
+
+        taskEl.innerHTML = `
+          <div class="flex items-center gap-4 flex-1 min-w-0">
+            <!-- Checkbox -->
+            <div onclick="toggleTask('${task.id}', event)" 
+                 class="w-6 h-6 rounded-full border-2 border-on-surface-variant/40 flex-shrink-0 flex items-center justify-center cursor-pointer hover:border-primary transition-all active:scale-90">
+              <span class="material-symbols-outlined text-[14px] text-white opacity-0 scale-50 transition-all" style="font-variation-settings: 'FILL' 1;">check</span>
+            </div>
+
+            <!-- Title -->
+            <div onclick="editTaskTitle('${task.id}', this)" 
+                 class="task-title flex-1 text-[15px] cursor-pointer leading-tight select-none text-on-surface pr-4">
+              ${task.title}
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4 text-xs text-on-surface-variant/70">
+            ${dueBadge}
+
+            <!-- Priority -->
+            <div onclick="cycleTaskPriority('${task.id}', event)" class="flex items-center gap-1.5 cursor-pointer px-2 py-1 rounded-lg hover:bg-white/5">
+              <div class="priority-dot" style="background-color: ${priorityColor}; box-shadow: 0 0 6px ${priorityColor}40"></div>
+              <span class="font-medium hidden md:inline text-[10px] uppercase tracking-wider">${task.priority || 'low'}</span>
+            </div>
+
+            <!-- Time ago -->
+            <div class="font-mono text-[10px] w-[58px] text-right tabular-nums text-on-surface-variant/50">
+              ${timeAgo(task.createdAt)}
+            </div>
+
+            <!-- Delete -->
+            <button onclick="deleteTask('${task.id}', event)"
+                    class="opacity-0 group-hover:opacity-100 transition-all text-on-surface-variant/50 hover:text-error px-1">
+              <span class="material-symbols-outlined text-[17px]">delete</span>
+            </button>
+          </div>
+        `;
+
+        // Drag and drop
+        taskEl.addEventListener('dragstart', handleDragStart);
+        taskEl.addEventListener('dragover', handleDragOver);
+        taskEl.addEventListener('drop', handleDrop);
+        taskEl.addEventListener('dragend', handleDragEnd);
+
+        container.appendChild(taskEl);
+      });
+    }
+
+    // Drag and drop support
+    let draggedElement = null;
+
+    function handleDragStart(e) {
+      draggedElement = this;
+      this.style.opacity = '0.5';
+      e.dataTransfer.effectAllowed = 'move';
+    }
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+    }
+
+    function handleDrop(e) {
+      e.preventDefault();
+      if (draggedElement === this) return;
+
+      const container = document.getElementById('task-list-container');
+      const tasks = Array.from(container.children);
+      const fromIndex = tasks.indexOf(draggedElement);
+      const toIndex = tasks.indexOf(this);
+
+      if (fromIndex < 0 || toIndex < 0) return;
+
+      // Reorder in state
+      const projectTasks = [...(state.tasks[currentProjectId] || [])];
+      const [movedTask] = projectTasks.splice(fromIndex, 1);
+      projectTasks.splice(toIndex, 0, movedTask);
+
+      state.tasks[currentProjectId] = projectTasks;
+      saveState();
+
+      // Re-render
+      renderMain();
+    }
+
+    function handleDragEnd() {
+      if (draggedElement) draggedElement.style.opacity = '1';
+      draggedElement = null;
+    }
+
+    // ==================== PROJECT DRAG AND DROP (Reorder) ====================
+    let draggedProjectElement = null;
+
+    function handleProjectDragStart(e) {
+      draggedProjectElement = this;
+      this.style.opacity = '0.5';
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', this.dataset.projectId);
+    }
+
+    function handleProjectDragOver(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      
+      // Visual feedback
+      this.style.borderTop = '2px solid #6366f1';
+    }
+
+    function handleProjectDragLeave(e) {
+      this.style.borderTop = '';
+    }
+
+    function handleProjectDrop(e) {
+      e.preventDefault();
+      
+      if (draggedProjectElement === this) return;
+
+      const draggedId = e.dataTransfer.getData('text/plain');
+      const targetId = this.dataset.projectId;
+
+      if (draggedId === targetId) return;
+
+      const projects = [...state.projects];
+      const fromIndex = projects.findIndex(p => p.id === draggedId);
+      const toIndex = projects.findIndex(p => p.id === targetId);
+
+      if (fromIndex < 0 || toIndex < 0) return;
+
+      const [movedProject] = projects.splice(fromIndex, 1);
+      projects.splice(toIndex, 0, movedProject);
+
+      state.projects = projects;
+      saveState();
+
+      // Clean borders
+      this.style.borderTop = '';
+
+      // Re-render sidebar to reflect new order
+      renderSidebar();
+    }
+
+    function handleProjectDragEnd() {
+      if (draggedProjectElement) {
+        draggedProjectElement.style.opacity = '1';
+        draggedProjectElement.style.borderTop = '';
+      }
+      draggedProjectElement = null;
+      
+      // Clean up any leftover borders on other items
+      document.querySelectorAll('#project-list [data-project-id]').forEach(el => {
+        el.style.borderTop = '';
+      });
+    }
+
+    // Allow dropping at the end of the project list (to move to bottom)
+    function handleProjectListDrop(e) {
+      e.preventDefault();
+      
+      const draggedId = e.dataTransfer.getData('text/plain');
+      if (!draggedId) return;
+
+      const projects = [...state.projects];
+      const fromIndex = projects.findIndex(p => p.id === draggedId);
+      if (fromIndex < 0) return;
+
+      const [movedProject] = projects.splice(fromIndex, 1);
+      projects.push(movedProject); // Move to the end
+
+      state.projects = projects;
+      saveState();
+      renderSidebar();
+    }
+
+    // Add a new task
+    function addNewTask() {
+      const input = document.getElementById('new-task-input');
+      if (!input || !currentProjectId) return;
+
+      const title = input.value.trim();
+      if (!title) return;
+
+      if (!state.tasks[currentProjectId]) {
+        state.tasks[currentProjectId] = [];
+      }
+
+      // Use selected deadline or leave null (user can add later)
+      let due = newTaskDueDate || null;
+
+      const newTask = {
+        id: 'task_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+        title,
+        completed: false,
+        priority: newTaskPriority || 'low',
+        dueDate: due,
+        createdAt: new Date().toISOString()
+      };
+
+      state.tasks[currentProjectId].unshift(newTask);
+      saveState();
+
+      // Reset temporary state
+      input.value = '';
+      newTaskDueDate = null;
+
+      renderMain();
+    }
+
+    // Toggle task completion → move to Archive
+    function toggleTask(taskId, e) {
+      e.stopImmediatePropagation();
+      if (!currentProjectId) return;
+
+      const tasks = state.tasks[currentProjectId] || [];
+      const task = tasks.find(t => t.id === taskId);
+      if (!task) return;
+
+      const wasCompleted = task.completed;
+      task.completed = true; // always archive on check
+
+      // record when it was archived
+      if (!task.archivedAt) task.archivedAt = new Date().toISOString();
+
+      saveState();
+
+      // Nice feedback
+      showToast(`Archived “${task.title.length > 32 ? task.title.slice(0,29)+'...' : task.title}”`);
+
+      // Celebrate if this was the last active task
+      const remainingActive = tasks.filter(t => !t.completed).length;
+      if (!wasCompleted && remainingActive === 0) {
+        setTimeout(() => triggerConfetti(), 220);
+      }
+
+      renderMain();
+    }
+
+    function cycleTaskPriority(taskId, e) {
+      e.stopImmediatePropagation();
+      const tasks = state.tasks[currentProjectId] || [];
+      const task = tasks.find(t => t.id === taskId);
+      if (!task) return;
+
+      const order = ['low', 'medium', 'high'];
+      let idx = order.indexOf(task.priority || 'low');
+      task.priority = order[(idx + 1) % 3];
+
+      saveState();
+      renderMain();
+    }
+
+    function editTaskTitle(taskId, element) {
+      const tasks = state.tasks[currentProjectId] || [];
+      const task = tasks.find(t => t.id === taskId);
+      if (!task) return;
+
+      const original = task.title;
+      element.contentEditable = true;
+      element.focus();
+      
+      // Select all text
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+
+      function finishEdit() {
+        element.contentEditable = false;
+        const newTitle = element.innerText.trim();
+        
+        if (newTitle && newTitle !== original) {
+          task.title = newTitle;
+          saveState();
+        } else {
+          element.innerText = original;
+        }
+        element.removeEventListener('blur', finishEdit);
+        element.removeEventListener('keydown', onKeyDown);
+      }
+
+      function onKeyDown(ev) {
+        if (ev.key === 'Enter') {
+          ev.preventDefault();
+          finishEdit();
+        } else if (ev.key === 'Escape') {
+          element.innerText = original;
+          finishEdit();
+        }
+      }
+
+      element.addEventListener('blur', finishEdit, { once: true });
+      element.addEventListener('keydown', onKeyDown);
+    }
+
+    function deleteTask(taskId, e) {
+      e.stopImmediatePropagation();
+      if (!currentProjectId) return;
+      
+      state.tasks[currentProjectId] = (state.tasks[currentProjectId] || []).filter(t => t.id !== taskId);
+      saveState();
+      renderMain();
+    }
+
+    // Permanently clear the entire archive (use with care)
+    function clearCompletedTasks() {
+      if (!currentProjectId) return;
+      if (!confirm('Permanently delete all archived tasks?')) return;
+      state.tasks[currentProjectId] = (state.tasks[currentProjectId] || []).filter(t => !t.completed);
+      saveState();
+      renderMain();
+    }
+
+    // Select project
+    function selectProject(projectId) {
+      currentProjectId = projectId;
+      currentSearch = '';
+      newTaskDueDate = null;   // reset any pending deadline when switching projects
+      closeMobileSidebar();    // close drawer on mobile after selection
+      renderSidebar();
+      renderMain();
+    }
+
+    // Rename project
+    function renameCurrentProject() {
+      if (!currentProjectId) return;
+      const project = state.projects.find(p => p.id === currentProjectId);
+      if (!project) return;
+
+      const newName = prompt('Rename project:', project.name);
+      if (newName && newName.trim()) {
+        project.name = newName.trim();
+        saveState();
+        renderSidebar();
+        renderMain();
+      }
+    }
+
+    // Delete current project
+    function deleteCurrentProject() {
+      if (!currentProjectId) return;
+      
+      const project = state.projects.find(p => p.id === currentProjectId);
+      if (!confirm(`Delete project "${project.name}"? This cannot be undone.`)) {
+        return;
+      }
+
+      // Remove project and its tasks
+      state.projects = state.projects.filter(p => p.id !== currentProjectId);
+      delete state.tasks[currentProjectId];
+
+      currentProjectId = state.projects.length > 0 ? state.projects[0].id : null;
+      
+      saveState();
+      renderSidebar();
+      renderMain();
+    }
+
+    // New project modal
+    function showNewProjectModal() {
+      const modal = document.getElementById('new-project-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      
+      // Focus name input
+      setTimeout(() => {
+        const input = document.getElementById('project-name-input');
+        input.focus();
+        input.select();
+      }, 120);
+
+      // Render color swatches
+      renderColorSwatches();
+    }
+
+    function hideNewProjectModal() {
+      const modal = document.getElementById('new-project-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function renderColorSwatches() {
+      const container = document.getElementById('color-swatches');
+      container.innerHTML = '';
+
+      PROJECT_COLORS.forEach((color, i) => {
+        const swatch = document.createElement('button');
+        swatch.className = `w-9 h-9 rounded-2xl border-2 transition-all ${selectedColor === color ? 'border-white scale-110' : 'border-transparent hover:border-white/60'}`;
+        swatch.style.backgroundColor = color;
+        
+        swatch.onclick = () => {
+          selectedColor = color;
+          // Refresh swatches to update selection
+          renderColorSwatches();
+        };
+        
+        container.appendChild(swatch);
+      });
+    }
+
+    function createProjectFromModal() {
+      const input = document.getElementById('project-name-input');
+      const name = input.value.trim();
+      
+      if (!name) {
+        input.classList.add('!border-rose-500');
+        setTimeout(() => input.classList.remove('!border-rose-500'), 800);
+        return;
+      }
+
+      const newProject = {
+        id: 'proj_' + Date.now(),
+        name: name,
+        color: selectedColor,
+        createdAt: new Date().toISOString()
+      };
+
+      state.projects.unshift(newProject);
+      state.tasks[newProject.id] = [];
+
+      saveState();
+      hideNewProjectModal();
+
+      // Select the new project immediately
+      currentProjectId = newProject.id;
+      currentSearch = '';
+      newTaskDueDate = null;
+
+      renderSidebar();
+      renderMain();
+    }
+
+    // Beautiful confetti
+    function triggerConfetti() {
+      const colors = ['#6366f1', '#a855f7', '#ec4899', '#22c55e', '#f59e0b'];
+      const container = document.body;
+      
+      for (let i = 0; i < 85; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'fun-confetti';
+        
+        const size = Math.random() * 9 + 6;
+        piece.style.cssText = `
+          position: fixed;
+          left: ${Math.random() * 100}vw;
+          top: -20px;
+          width: ${size}px;
+          height: ${size}px;
+          background: ${colors[Math.floor(Math.random() * colors.length)]};
+          border-radius: ${Math.random() > 0.6 ? '50%' : '2px'};
+          opacity: ${Math.random() * 0.7 + 0.6};
+          z-index: 99999;
+          pointer-events: none;
+          transform: rotate(${Math.random() * 360}deg);
+        `;
+        
+        container.appendChild(piece);
+
+        const duration = Math.random() * 2400 + 2100;
+        const xDrift = (Math.random() - 0.5) * 180;
+
+        piece.animate([
+          { 
+            transform: `translateY(0) rotate(0deg)`,
+            opacity: piece.style.opacity 
+          },
+          { 
+            transform: `translateY(${window.innerHeight + 80}px) translateX(${xDrift}px) rotate(${Math.random() * 600 - 200}deg)`,
+            opacity: 0 
+          }
+        ], {
+          duration: duration,
+          easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)'
+        }).onfinish = () => piece.remove();
+      }
+
+      // Bonus: small toast
+      showToast("Amazing work! All tasks complete 🎉");
+    }
+
+    function showToast(message) {
+      const toast = document.createElement('div');
+      toast.className = `fixed bottom-6 left-1/2 -translate-x-1/2 px-5 py-2.5 rounded-2xl bg-slate-800 border border-slate-700 text-sm shadow-2xl flex items-center gap-2`;
+      toast.innerHTML = `
+        <span>${message}</span>
+      `;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.transition = 'all 0.2s ease';
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 180);
+      }, 1600);
+    }
+
+    // ==================== ARCHIVE SYSTEM ====================
+
+    function showArchiveModal() {
+      const modal = document.getElementById('archive-modal');
+      if (!modal || !currentProjectId) return;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      renderArchiveList();
+    }
+
+    function hideArchiveModal() {
+      const modal = document.getElementById('archive-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function renderArchiveList() {
+      const container = document.getElementById('archive-list');
+      const countEl = document.getElementById('archive-count');
+      if (!container || !currentProjectId) return;
+
+      const archived = getArchivedTasks(currentProjectId);
+      container.innerHTML = '';
+
+      if (countEl) countEl.textContent = `${archived.length} task${archived.length !== 1 ? 's' : ''}`;
+
+      if (archived.length === 0) {
+        container.innerHTML = `
+          <div class="px-8 py-12 text-center text-slate-400">
+            <i class="fa-solid fa-archive text-3xl mb-4 block text-slate-600"></i>
+            <p>No archived tasks yet.</p>
+          </div>
+        `;
+        return;
+      }
+
+      archived.forEach(task => {
+        const row = document.createElement('div');
+        row.className = `flex items-center gap-4 px-5 py-3.5 mx-2 my-1 rounded-2xl bg-slate-950 border border-slate-800 group`;
+
+        const due = formatDueDate(task.dueDate);
+        const dueText = due ? `<span class="text-xs px-2 py-px rounded" style="color:${due.color}">${due.text}</span>` : '';
+
+        row.innerHTML = `
+          <div class="flex-1 min-w-0">
+            <div class="text-sm ${task.completed ? 'line-through opacity-60' : ''}">${task.title}</div>
+            <div class="flex items-center gap-3 text-[10px] text-slate-500 mt-1">
+              <span>${task.priority || 'low'} priority</span>
+              ${dueText}
+              ${task.archivedAt ? `<span>archived ${timeAgo(task.archivedAt)}</span>` : ''}
+            </div>
+          </div>
+          <div class="flex items-center gap-2 opacity-80 group-hover:opacity-100">
+            <button onclick="restoreTask('${task.id}'); event.stopImmediatePropagation();"
+                    class="text-xs px-4 py-1.5 rounded-xl bg-emerald-900/60 hover:bg-emerald-900 text-emerald-300 transition-colors">
+              Restore
+            </button>
+            <button onclick="permanentlyDeleteArchivedTask('${task.id}'); event.stopImmediatePropagation();"
+                    class="text-xs px-3 py-1.5 rounded-xl bg-rose-900/50 hover:bg-rose-900 text-rose-300 transition-colors">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function restoreTask(taskId) {
+      if (!currentProjectId) return;
+      const tasks = state.tasks[currentProjectId] || [];
+      const task = tasks.find(t => t.id === taskId);
+      if (!task) return;
+
+      task.completed = false;
+      delete task.archivedAt;
+
+      saveState();
+      renderArchiveList();   // refresh modal
+      renderMain();          // refresh main list
+    }
+
+    function permanentlyDeleteArchivedTask(taskId) {
+      if (!currentProjectId) return;
+      if (!confirm('Delete this archived task forever?')) return;
+
+      state.tasks[currentProjectId] = (state.tasks[currentProjectId] || []).filter(t => t.id !== taskId);
+      saveState();
+      renderArchiveList();
+      renderMain();
+    }
+
+    // Allow changing due date from the task row
+    function editTaskDueDate(taskId, e) {
+      e.stopImmediatePropagation();
+      if (!currentProjectId) return;
+
+      const tasks = state.tasks[currentProjectId] || [];
+      const task = tasks.find(t => t.id === taskId);
+      if (!task) return;
+
+      const newDate = prompt('Set new deadline (YYYY-MM-DD) or leave empty to clear:', task.dueDate || '');
+      if (newDate === null) return; // user cancelled
+
+      task.dueDate = newDate.trim() === '' ? null : newDate.trim();
+      saveState();
+      renderMain();
+    }
+
+    function renderEmptyState(container) {
+      container.innerHTML = `
+        <div class="flex items-center justify-center h-full">
+          <div class="text-center max-w-sm">
+            <div class="mx-auto w-16 h-16 rounded-3xl bg-gradient-to-br from-indigo-500/10 to-violet-500/10 flex items-center justify-center mb-6">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3C8.5 3 6 6 6 9c0 2.5 1.5 4.5 3 5.5V21h6v-6.5c1.5-1 3-3 3-5.5 0-3-2.5-6-6-6z"/>
+                <circle cx="9" cy="9" r="1.25" fill="#64748b"/>
+                <circle cx="15" cy="9" r="1.25" fill="#64748b"/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold tracking-tight mb-2">No projects yet</h3>
+            <p class="text-slate-400 text-sm mb-6">Create your first project and start turning intentions into action.</p>
+            <button onclick="showNewProjectModal()" 
+                    class="inline-flex items-center gap-2 bg-white text-slate-900 font-semibold px-6 py-2.5 rounded-2xl text-sm active:scale-[0.985] transition">
+              <i class="fa-solid fa-plus"></i>
+              <span>Create your first project</span>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Initial render (called AFTER successful auth)
+    function initAppAfterAuth() {
+      initTailwind();
+      loadUserData(currentUser.id);
+
+      // Seed demo data only for new guest users
+      if (currentUser.id === 'guest' && state.projects.length === 0) {
+        seedDemoData();
+        saveCurrentUserData();
+      }
+
+      // If we have projects, select the first one
+      if (state.projects.length > 0 && !currentProjectId) {
+        currentProjectId = state.projects[0].id;
+      }
+
+      // Initial renders
+      renderSidebar();
+      renderMain();
+
+      // Add user profile to sidebar (only for real users)
+      renderUserProfileInSidebar();
+
+      // Keyboard shortcuts
+      document.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          const search = document.getElementById('search-input');
+          if (search) {
+            search.focus();
+            search.select();
+          }
+        }
+        
+        if (e.key === 'Escape') {
+          const modal = document.getElementById('new-project-modal');
+          if (!modal.classList.contains('hidden')) {
+            hideNewProjectModal();
+          } else {
+            const search = document.getElementById('search-input');
+            if (search && search === document.activeElement) {
+              currentSearch = '';
+              search.value = '';
+              renderMain();
+            }
+          }
+        }
+      });
+
+      window.newTaskPriority = 'low';
+    }
+
+    // Boot the app — check auth first
+    window.onload = function() {
+      currentUser = getCurrentUser();
+
+      if (currentUser) {
+        // User already logged in (or guest)
+        hideAuthScreen();
+        initAppAfterAuth();
+      } else {
+        // No session — show auth screen
+        showAuthScreen();
+        showAuthTab('login');
+      }
+    };
+  </script>
+</body>
+</html>

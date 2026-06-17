@@ -1,0 +1,639 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply text-on-surface font-body-md;
+    background: transparent;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Subtle colour tint mesh on top of video */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+      radial-gradient(ellipse at 15% 15%, rgba(109, 59, 215, 0.07) 0%, transparent 50%),
+      radial-gradient(ellipse at 85% 85%, rgba(0, 210, 255, 0.05) 0%, transparent 50%);
+    z-index: -1;
+    pointer-events: none;
+    animation: pulseSlow 18s ease-in-out infinite alternate;
+  }
+}
+
+@layer components {
+
+  /* ── Glass Cards ── */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease, box-shadow 0.35s ease;
+  }
+
+  .glass-card:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 6px 28px rgba(0, 0, 0, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  /* Elevated glass for task list */
+  .glass-card-elevated {
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+    transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .glass-card-elevated:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 6px 28px rgba(0, 0, 0, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transform: translateY(-1px);
+  }
+
+  /* Sidebar */
+  .sidebar-glass {
+    background: rgba(10, 12, 18, 0.35);
+    backdrop-filter: blur(48px) saturate(180%);
+    -webkit-backdrop-filter: blur(48px) saturate(180%);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 4px 0 32px rgba(0, 0, 0, 0.2);
+  }
+
+  .kinetic-gradient {
+    background: linear-gradient(135deg, #a078ff 0%, #00d2ff 100%);
+  }
+
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    font-size: 24px;
+  }
+
+  /* ── Stagger animations ── */
+  .stagger-1 {
+    animation: fadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+  }
+
+  .stagger-2 {
+    animation: fadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+  }
+
+  .stagger-3 {
+    animation: fadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.19s both;
+  }
+
+  .stagger-4 {
+    animation: fadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.26s both;
+  }
+
+  .stagger-5 {
+    animation: fadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.33s both;
+  }
+
+  .stagger-6 {
+    animation: fadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.40s both;
+  }
+
+  .focus-ring-animate:focus-within {
+    box-shadow: 0 0 0 2px rgba(208, 188, 255, 0.25), 0 4px 24px rgba(0, 0, 0, 0.15);
+  }
+
+  /* ── Scrollbars ── */
+  .sidebar-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
+  }
+
+  .task-list {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.06) transparent;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .fun-confetti {
+    position: fixed;
+    z-index: 99999;
+    pointer-events: none;
+  }
+
+  /* ── Task rows ── */
+  .task-row {
+    transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+  }
+
+  /* single consistent hover — overrides the Tailwind hover:bg-white/[0.02] on the element */
+  .task-row:hover {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+  }
+
+  .priority-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+    flex-shrink: 0;
+  }
+
+  .priority-dot:hover {
+    transform: scale(1.4);
+  }
+
+  /* ── Focus columns ── */
+  .focus-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    min-width: 0;
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+    transition: all 0.25s ease;
+  }
+
+  .focus-column:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 6px 28px rgba(0, 0, 0, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.09);
+  }
+
+  .focus-column-header {
+    padding: 20px 24px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .focus-column-body {
+    padding: 12px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 120px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── Focus task cards ── */
+  .focus-task-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    border-radius: 14px;
+    padding: 14px 16px;
+    transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  .focus-task-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  }
+
+  .focus-task-card:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.16);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  /* ── Sidebar project items ── */
+  .project-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    margin: 0 4px;
+  }
+
+  .project-item:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .project-item.active {
+    background: rgba(208, 188, 255, 0.1);
+    border-color: rgba(208, 188, 255, 0.2);
+    box-shadow: 0 2px 12px rgba(160, 120, 255, 0.12);
+  }
+
+  /* ── Stats cards ── */
+  .stat-card {
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    border-radius: 18px;
+    padding: 20px 24px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+    transition: all 0.25s ease;
+  }
+
+  .stat-card:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 6px 28px rgba(0, 0, 0, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.09);
+  }
+
+  /* ── Modals ── */
+  .modal {
+    animation: modalPop 0.22s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  /* New project modal card (targets inline bg in HTML via Tailwind — override here) */
+  #new-project-modal>div,
+  #archive-modal>div,
+  #date-picker-modal>div {
+    background: rgba(15, 17, 24, 0.45) !important;
+    backdrop-filter: blur(48px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(48px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  }
+
+  /* Date picker inner sections */
+  #date-picker-modal .bg-slate-900,
+  #date-picker-modal .bg-slate-950,
+  #archive-modal .bg-slate-900 {
+    background: transparent !important;
+  }
+
+  .lumina-gradient {
+    background: linear-gradient(135deg, #a078ff, #00d2ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* ── 3D Profile FAB ── */
+  .profile-fab {
+    @apply fixed bottom-8 right-8 w-14 h-14 rounded-full flex items-center justify-center z-[100] cursor-pointer;
+    background: linear-gradient(145deg, #b090ff, #6d3bd7);
+    box-shadow:
+      0 8px 20px rgba(109, 59, 215, 0.5),
+      0 2px 6px rgba(0, 0, 0, 0.3),
+      inset 0 1px 2px rgba(255, 255, 255, 0.25);
+    transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+    transform-style: preserve-3d;
+  }
+
+  .profile-fab:hover {
+    transform: translateY(-4px) scale(1.06);
+    box-shadow:
+      0 14px 30px rgba(109, 59, 215, 0.6),
+      0 4px 10px rgba(0, 0, 0, 0.3),
+      inset 0 1px 2px rgba(255, 255, 255, 0.3);
+  }
+
+  .profile-fab:active {
+    transform: translateY(-1px) scale(0.97);
+  }
+
+  .profile-fab .initials {
+    @apply text-white font-bold text-lg select-none;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  }
+
+  /* ── Profile Modal ── */
+  .profile-modal-card {
+    @apply rounded-3xl w-full max-w-sm p-7 shadow-2xl relative overflow-hidden;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(48px) saturate(180%);
+    -webkit-backdrop-filter: blur(48px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.09);
+  }
+
+  .profile-avatar-large {
+    @apply w-20 h-20 rounded-3xl kinetic-gradient flex items-center justify-center text-white text-3xl font-bold mb-5 mx-auto;
+    box-shadow: 0 8px 24px rgba(160, 120, 255, 0.4);
+  }
+
+  /* ── Auth screen ── */
+  .auth-screen {
+    @apply fixed inset-0 z-[9999] flex items-center justify-center;
+    background: transparent;
+  }
+
+  .auth-card {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(48px) saturate(180%);
+    -webkit-backdrop-filter: blur(48px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 24px 64px -12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  .auth-input {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #e1e2eb;
+    transition: all 0.2s ease;
+  }
+
+  .auth-input:focus {
+    border-color: rgba(208, 188, 255, 0.5);
+    background: rgba(255, 255, 255, 0.09);
+    box-shadow: 0 0 0 3px rgba(208, 188, 255, 0.1);
+    outline: none;
+  }
+
+  .auth-tab {
+    position: relative;
+    padding-bottom: 10px;
+    font-weight: 600;
+    @apply text-on-surface-variant/60;
+    transition: color 0.2s ease;
+  }
+
+  .auth-tab.active {
+    @apply text-on-surface;
+  }
+
+  .auth-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to right, #a078ff, #00d2ff);
+    border-radius: 2px;
+  }
+
+  .auth-error {
+    color: #ff8a80;
+    font-size: 12px;
+    margin-top: 4px;
+  }
+
+  /* ── Task input area ── */
+  .task-input-area {
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    border-radius: 20px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .task-input-area:focus-within {
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(208, 188, 255, 0.3);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(208, 188, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  /* ── Header ── */
+  .main-header {
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(32px) saturate(160%);
+    -webkit-backdrop-filter: blur(32px) saturate(160%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* ── Pill badge ── */
+  .pill-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border: 1px solid transparent;
+  }
+
+  /* ── Urgent banner ── */
+  .urgent-banner {
+    background: rgba(255, 107, 129, 0.07);
+    border: 1px solid rgba(255, 107, 129, 0.18);
+    border-radius: 16px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .urgent-banner:hover {
+    background: rgba(255, 107, 129, 0.12);
+    border-color: rgba(255, 107, 129, 0.28);
+  }
+}
+
+@keyframes pulseSlow {
+  0% {
+    opacity: 0.7;
+    transform: scale(1) translate(0, 0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1.04) translate(1%, 1%);
+  }
+}
+
+@keyframes modalPop {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* ── Sidebar layout ── */
+#sidebar {
+  transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1), transform 0.3s ease-in-out;
+  overflow: hidden;
+}
+
+#sidebar.collapsed {
+  width: 56px;
+}
+
+#sidebar:not(.collapsed) {
+  width: 260px;
+}
+
+#main-content {
+  transition: margin-left 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (min-width: 1024px) {
+  #main-content.sidebar-open {
+    margin-left: 260px;
+  }
+
+  #main-content.sidebar-rail {
+    margin-left: 56px;
+  }
+
+  #main-content.sidebar-closed {
+    margin-left: 0;
+  }
+}
+
+/* ── Collapsed sidebar ── */
+#sidebar.collapsed .sidebar-logo-text,
+#sidebar.collapsed .sidebar-section-header,
+#sidebar.collapsed .sidebar-new-project-label,
+#sidebar.collapsed #sidebar-focus-slot,
+#sidebar.collapsed .project-count-badge {
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+#sidebar.collapsed .sidebar-logo-area {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+  gap: 0;
+}
+
+#sidebar.collapsed #sidebar-toggle-btn {
+  margin: 0 auto;
+}
+
+#sidebar.collapsed .project-item {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+  position: relative;
+}
+
+#sidebar.collapsed .project-item .project-item-dot {
+  display: block !important;
+}
+
+#sidebar.collapsed .project-item .project-item-text {
+  display: none;
+}
+
+#sidebar.collapsed .project-item .project-item-badge {
+  display: none;
+}
+
+#sidebar.collapsed .sidebar-new-project-btn {
+  padding-left: 0;
+  padding-right: 0;
+  justify-content: center;
+}
+
+#sidebar.collapsed .sidebar-new-project-btn .sidebar-new-project-label {
+  display: none;
+}
+
+/* Rail tooltip */
+#sidebar.collapsed .project-item:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(10, 12, 18, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #e1e2eb;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 8px;
+  white-space: nowrap;
+  z-index: 200;
+  pointer-events: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* ── Live Video Wallpaper ── */
+#video-wallpaper {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+}
+
+#video-wallpaper video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Dark scrim — light enough to let video show through, dark enough for readability */
+#video-wallpaper-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 6, 12, 0.38);
+}
