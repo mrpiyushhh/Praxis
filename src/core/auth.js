@@ -1,125 +1,80 @@
 /**
  * Authentication module
- * Currently handles local-only accounts with data isolation.
- * Designed to be easily swappable with Firebase/Supabase later.
+ * Now uses real backend API endpoints with JWT tokens.
  */
 
-import { getItem, setItem, removeItem, STORAGE_KEYS, getUserDataKey } from './storage.js'
+import { getItem, setItem, removeItem, STORAGE_KEYS, getUserDataKey, apiPost } from './storage.js'
 
 let currentUser = null
-
-export function getUsers() {
-  return getItem(STORAGE_KEYS.USERS, [])
-}
-
-export function saveUsers(users) {
-  setItem(STORAGE_KEYS.USERS, users)
-}
-
-function hashPassword(password) {
-  // Demo-only hashing. Replace with proper auth later.
-  return btoa(unescape(encodeURIComponent(password + 'praxis-salt-2025')))
-}
 
 export function getCurrentUser() {
   const userId = getItem(STORAGE_KEYS.CURRENT_USER_ID)
   if (!userId) return null
 
-  if (userId === 'guest') {
-    return { id: 'guest', name: 'Guest', email: null }
-  }
-
-  const users = getUsers()
-  return users.find(u => u.id === userId) || null
+  // We only store basic info locally now, the real source of truth is the backend
+  const users = getItem(STORAGE_KEYS.USERS, [])
+  return users.find(u => u.id === userId) || { id: userId, name: 'User' }
 }
 
-export function setCurrentUser(userId) {
-  if (userId) {
-    setItem(STORAGE_KEYS.CURRENT_USER_ID, userId)
+export function setCurrentUser(user, token) {
+  if (user && token) {
+    setItem(STORAGE_KEYS.CURRENT_USER_ID, user.id)
+    setItem(STORAGE_KEYS.AUTH_TOKEN, token)
+    
+    // Save minimal info locally for quick retrieval
+    const users = getItem(STORAGE_KEYS.USERS, [])
+    const existingIdx = users.findIndex(u => u.id === user.id)
+    if (existingIdx >= 0) {
+      users[existingIdx] = user
+    } else {
+      users.push(user)
+    }
+    setItem(STORAGE_KEYS.USERS, users)
   } else {
     removeItem(STORAGE_KEYS.CURRENT_USER_ID)
+    removeItem(STORAGE_KEYS.AUTH_TOKEN)
   }
 }
 
-export function signup(name, email, password) {
-  const users = getUsers()
+export async function signup(name, email, password) {
   const normalizedEmail = email.toLowerCase().trim()
-
-  if (users.some(u => u.email === normalizedEmail)) {
-    throw new Error('An account with this email already exists')
-  }
-
-  const newUser = {
-    id: 'user_' + Date.now(),
-    name: name.trim(),
-    email: normalizedEmail,
-    passwordHash: hashPassword(password),
-    createdAt: new Date().toISOString()
-  }
-
-  users.push(newUser)
-  saveUsers(users)
-
-  // Initialize empty data for new user
-  const initialData = { projects: [], tasks: {} }
-  setItem(getUserDataKey(newUser.id), initialData)
-
-  currentUser = { id: newUser.id, name: newUser.name, email: newUser.email }
-  setCurrentUser(newUser.id)
+  
+  const response = await apiPost('/auth/signup', { name, email: normalizedEmail, password })
+  
+  currentUser = response.user
+  setCurrentUser(response.user, response.token)
 
   return currentUser
 }
 
-export function login(email, password) {
-  const users = getUsers()
+export async function login(email, password) {
   const normalizedEmail = email.toLowerCase().trim()
-  const user = users.find(u => u.email === normalizedEmail)
-
-  if (!user || user.passwordHash !== hashPassword(password)) {
-    throw new Error('Invalid email or password')
-  }
-
-  currentUser = { id: user.id, name: user.name, email: user.email }
-  setCurrentUser(user.id)
+  
+  const response = await apiPost('/auth/login', { email: normalizedEmail, password })
+  
+  currentUser = response.user
+  setCurrentUser(response.user, response.token)
 
   return currentUser
 }
 
-export function loginAsGuest() {
-  currentUser = { id: 'guest', name: 'Guest', email: null }
-  setCurrentUser('guest')
+export async function loginAsGuest() {
+  // Create a temporary guest account on the backend
+  const randomSuffix = Math.floor(Math.random() * 1000000)
+  const guestName = 'Guest User'
+  const guestEmail = `guest${randomSuffix}@praxis-demo.local`
+  const guestPassword = `guest_pass_${randomSuffix}`
 
-  // Ensure guest has data
-  if (!getItem(getUserDataKey('guest'))) {
-    setItem(getUserDataKey('guest'), { projects: [], tasks: {} })
-  }
-
-  return currentUser
+  return await signup(guestName, guestEmail, guestPassword)
 }
 
 export function logout() {
   currentUser = null
-  removeItem(STORAGE_KEYS.CURRENT_USER_ID)
+  setCurrentUser(null, null)
 }
 
-export function changePassword(oldPassword, newPassword) {
-  const user = getCurrentUser()
-  if (!user || user.id === 'guest') {
-    throw new Error('Guest users cannot change password')
-  }
-
-  const users = getUsers()
-  const userIdx = users.findIndex(u => u.id === user.id)
-  
-  if (userIdx < 0) throw new Error('User not found')
-  
-  if (users[userIdx].passwordHash !== hashPassword(oldPassword)) {
-    throw new Error('Current password is incorrect')
-  }
-
-  users[userIdx].passwordHash = hashPassword(newPassword)
-  saveUsers(users)
-  return true
+export async function changePassword(oldPassword, newPassword) {
+  throw new Error('Changing password via API is not yet implemented.')
 }
 
 export function getCurrentUserSync() {

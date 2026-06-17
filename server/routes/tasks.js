@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const Task = require('../models/Task');
+const auth = require('../middleware/auth');
 
 // Get all tasks for a user
-router.get('/:userId', async (req, res) => {
+router.get('/:userId', auth, async (req, res) => {
   try {
-    const tasks = await Task.find({ userId: req.params.userId });
+    const tasks = await Task.find({ userId: req.user.id });
     res.json(tasks);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -13,8 +14,10 @@ router.get('/:userId', async (req, res) => {
 });
 
 // Create or update a task
-router.post('/', async (req, res) => {
-  const { userId, projectId, id, title, description, priority, dueDate, completed, archivedAt } = req.body;
+router.post('/', auth, async (req, res) => {
+  const { projectId, id, title, description, priority, dueDate, completed, archivedAt } = req.body;
+  const userId = req.user.id; // Enforce security
+
   try {
     let task = await Task.findOne({ userId, id });
     if (task) {
@@ -31,9 +34,9 @@ router.post('/', async (req, res) => {
 });
 
 // Delete a task
-router.delete('/:userId/:id', async (req, res) => {
+router.delete('/:userId/:id', auth, async (req, res) => {
   try {
-    await Task.deleteOne({ userId: req.params.userId, id: req.params.id });
+    await Task.deleteOne({ userId: req.user.id, id: req.params.id });
     res.json({ message: 'Task deleted' });
   } catch (err) {
     res.status(500).json({ message: err.message });
