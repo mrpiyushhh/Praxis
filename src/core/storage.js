@@ -10,8 +10,9 @@ const STORAGE_KEYS = {
   AUTH_TOKEN: 'praxis-auth-token'
 }
 
-// Use VITE_API_URL environment variable if it exists (for production), otherwise use localhost
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api'
+// Production: set VITE_API_URL to your deployed backend (e.g. https://api.example.com/api)
+// Development: Vite proxies /api → http://localhost:5001
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api'
 
 export function getItem(key, defaultValue = null) {
   try {
@@ -38,40 +39,41 @@ function getAuthHeaders() {
 }
 
 // API Helpers
-export async function apiGet(endpoint) {
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    headers: getAuthHeaders()
-  })
+async function handleResponse(response, method) {
   if (!response.ok) {
     const err = await response.json().catch(() => ({}))
-    throw new Error(err.message || `API GET failed: ${response.statusText}`)
+    throw new Error(err.message || `API ${method} failed: ${response.statusText}`)
   }
   return response.json()
+}
+
+async function apiFetch(url, options, method) {
+  let response
+  try {
+    response = await fetch(url, options)
+  } catch {
+    throw new Error('Cannot reach the API server. Run `npm run dev` to start the frontend and backend together.')
+  }
+  return handleResponse(response, method)
+}
+
+export async function apiGet(endpoint) {
+  return apiFetch(`${API_BASE_URL}${endpoint}`, { headers: getAuthHeaders() }, 'GET')
 }
 
 export async function apiPost(endpoint, data) {
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+  return apiFetch(`${API_BASE_URL}${endpoint}`, {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify(data)
-  })
-  if (!response.ok) {
-    const err = await response.json().catch(() => ({}))
-    throw new Error(err.message || `API POST failed: ${response.statusText}`)
-  }
-  return response.json()
+  }, 'POST')
 }
 
 export async function apiDelete(endpoint) {
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+  return apiFetch(`${API_BASE_URL}${endpoint}`, {
     method: 'DELETE',
     headers: getAuthHeaders()
-  })
-  if (!response.ok) {
-    const err = await response.json().catch(() => ({}))
-    throw new Error(err.message || `API DELETE failed: ${response.statusText}`)
-  }
-  return response.json()
+  }, 'DELETE')
 }
 
 // User-specific data helpers
