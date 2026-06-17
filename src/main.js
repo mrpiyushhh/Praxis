@@ -94,7 +94,7 @@ function setupAuthForms() {
     if (!email || !pass) return showToast('Please fill in all fields')
     
     try {
-      currentUser = login(email, pass)
+      currentUser = await login(email, pass)
       toggleAuthUI(true)
       await loadUserData(currentUser.id)
       startApplication()
@@ -112,7 +112,7 @@ function setupAuthForms() {
     if (pass !== confirm) return showToast('Passwords do not match')
     
     try {
-      currentUser = signup(name, email, pass)
+      currentUser = await signup(name, email, pass)
       toggleAuthUI(true)
       await loadUserData(currentUser.id)
       startApplication()
@@ -122,10 +122,12 @@ function setupAuthForms() {
   // Guest
   document.querySelectorAll('.guest-btn').forEach(btn => {
     btn.addEventListener('click', async () => {
-      currentUser = loginAsGuest()
-      toggleAuthUI(true)
-      await loadUserData(currentUser.id)
-      startApplication()
+      try {
+        currentUser = await loginAsGuest()
+        toggleAuthUI(true)
+        await loadUserData(currentUser.id)
+        startApplication()
+      } catch (e) { showToast(e.message) }
     })
   })
 }
