@@ -132,7 +132,7 @@ function renderArchiveList() {
   archived.forEach(task => {
     const row = document.createElement('div')
     row.className = `flex items-center gap-4 px-5 py-3.5 mx-2 my-1 rounded-2xl group`
-    row.style.cssText = 'background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); transform: translate3d(0, 0, 0); transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;'
+    row.style.cssText = 'background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); transform: translate3d(0, 0, 0.1px); transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;'
     row.addEventListener('mouseenter', () => { row.style.background = 'rgba(255,255,255,0.08)'; row.style.borderColor = 'rgba(255,255,255,0.16)' })
     row.addEventListener('mouseleave', () => { row.style.background = 'rgba(255,255,255,0.05)'; row.style.borderColor = 'rgba(255,255,255,0.1)' })
 
