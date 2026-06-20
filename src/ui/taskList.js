@@ -131,7 +131,7 @@ function createFocusColumn(title, tasks, color, icon, bgColor, borderColor) {
 
 function createTaskCard(task, index, accentColor) {
   const el = document.createElement('div')
-  el.className = 'task-row focus-task-card glass-card group'
+  el.className = 'task-row focus-task-card group'
   el.dataset.taskId = task.id
   el.dataset.projectId = task.projectId
   el.dataset.index = index

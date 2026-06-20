@@ -596,3 +596,15 @@ function hideProfileModal() {
 
 // Boot
 initializeAuth()
+
+// Remove stagger animation classes after completion to fix Chrome's backdrop-filter rendering bug
+document.addEventListener('animationend', (e) => {
+  const target = e.target
+  if (!target) return
+  const classes = Array.from(target.classList)
+  const staggerClass = classes.find(c => c.startsWith('stagger-'))
+  if (staggerClass) {
+    target.classList.remove(staggerClass)
+  }
+})
+
