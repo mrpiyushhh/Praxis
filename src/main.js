@@ -3,7 +3,7 @@
  */
 import './styles/main.css'
 
-import { initAuth, login, signup, loginAsGuest, logout, changePassword } from './core/auth.js'
+import { initAuth, login, signup, loginAsGuest, logout, changePassword, getCurrentUser } from './core/auth.js'
 import { loadUserData, getState, saveState } from './core/state.js'
 
 import { renderSidebar, initProjectListDrop, updateHeader } from './ui/sidebar.js'
@@ -11,7 +11,7 @@ import { renderTasksList } from './ui/taskList.js'
 import { renderStats } from './ui/stats.js'
 import { initModals, showNewProjectModal, hideNewProjectModal, hideArchiveModal } from './ui/modals.js'
 import { initDatePicker, openDatePicker, closeDatePicker } from './ui/datePicker.js'
-import { getCurrentUser } from './core/auth.js'
+
 import { showUrgentBanner } from './ui/mainApp.js'
 
 import { addNewTask } from './features/tasks.js'

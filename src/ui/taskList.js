@@ -1,16 +1,22 @@
 /**
  * Task List UI Module — Fully self-contained with event delegation
  */
-import { getState, getActiveTasks, getUrgentTasks } from '../core/state.js'
+import { getState, getActiveTasks, getUrgentTasks, saveState } from '../core/state.js'
 import {
   toggleTask, cycleTaskPriority, deleteTask, editTaskTitle, editTaskDueDate
 } from '../features/tasks.js'
-import { renderSidebar } from './sidebar.js'
-import { renderStats } from './stats.js'
 import { openDatePicker } from './datePicker.js'
-import { formatDueDate, timeAgo, triggerConfetti, showToast, isTaskOverdue, getLocalDateString } from '../utils/helpers.js'
+import { formatDueDate, timeAgo, triggerConfetti, showToast, isTaskOverdue, getLocalDateString, getPriorityColor, getPriorityBg } from '../utils/helpers.js'
 
 let draggedTaskEl = null
+
+/**
+ * Dispatch a single event that main.js already listens for,
+ * instead of manually calling renderSidebar + renderStats + renderTasksList everywhere.
+ */
+function refreshAll() {
+  window.dispatchEvent(new CustomEvent('praxis-refresh'))
+}
 
 export function renderTasksList() {
   const container = document.getElementById('task-list-container')
@@ -79,16 +85,18 @@ function renderTimeGroupedTasks(container, tasks) {
   const overdue = tasks.filter(t => isTaskOverdue(t))
   const dueToday = tasks.filter(t => t.dueDate === todayStr)
   const dueTomorrow = tasks.filter(t => t.dueDate === tomorrowStr)
-  
-  // Columns
-  container.appendChild(createFocusColumn('Overdue', overdue, '#ff6b81', 'running_with_errors', 'rgba(255,107,129,0.08)', 'rgba(255,107,129,0.15)'))
-  container.appendChild(createFocusColumn('Today', dueToday, '#fbbf24', 'today', 'rgba(251,191,36,0.06)', 'rgba(251,191,36,0.12)'))
-  container.appendChild(createFocusColumn('Tomorrow', dueTomorrow, '#60a5fa', 'event_upcoming', 'rgba(96,165,250,0.06)', 'rgba(96,165,250,0.12)'))
+
+  // Look up all projects once for the focus cards
+  const state = getState()
+  const projectsMap = Object.fromEntries(state.projects.map(p => [p.id, p]))
+
+  container.appendChild(createFocusColumn('Overdue', overdue, '#ff6b81', 'running_with_errors', projectsMap))
+  container.appendChild(createFocusColumn('Today', dueToday, '#fbbf24', 'today', projectsMap))
+  container.appendChild(createFocusColumn('Tomorrow', dueTomorrow, '#60a5fa', 'event_upcoming', projectsMap))
 }
 
-function createFocusColumn(title, tasks, color, icon, bgColor, borderColor) {
+function createFocusColumn(title, tasks, color, icon, projectsMap) {
   const col = document.createElement('div')
-  // Styled identically to project stats cards (stat-card)
   col.className = 'focus-column min-w-0'
   
   const emptyState = tasks.length === 0 ? `
@@ -123,23 +131,22 @@ function createFocusColumn(title, tasks, color, icon, bgColor, borderColor) {
   
   const cardsContainer = col.querySelector('.task-cards-container')
   tasks.forEach((task, index) => {
-    cardsContainer.appendChild(createTaskCard(task, index, color))
+    cardsContainer.appendChild(createTaskCard(task, index, color, projectsMap))
   })
   
   return col
 }
 
-function createTaskCard(task, index, accentColor) {
+function createTaskCard(task, index, accentColor, projectsMap) {
   const el = document.createElement('div')
   el.className = 'task-row focus-task-card group'
   el.dataset.taskId = task.id
   el.dataset.projectId = task.projectId
   el.dataset.index = index
 
-  const prioColor = task.priority === 'high' ? '#ff6b81' : task.priority === 'medium' ? '#fbbf24' : '#34d399'
-  const prioBg = task.priority === 'high' ? 'rgba(255,107,129,0.1)' : task.priority === 'medium' ? 'rgba(251,191,36,0.1)' : 'rgba(52,211,153,0.1)'
-  const state = getState()
-  const project = state.projects.find(p => p.id === task.projectId)
+  const prioColor = getPriorityColor(task.priority)
+  const prioBg = getPriorityBg(task.priority)
+  const project = projectsMap[task.projectId]
 
   el.innerHTML = `
     <div class="flex items-start gap-3">
@@ -183,7 +190,6 @@ function createTaskCard(task, index, accentColor) {
 }
 
 function createTaskElement(task, index, currentProjectId) {
-  // Original row-based element for project views
   const el = document.createElement('div')
   el.className = `task-row group flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 px-5 sm:px-6 py-4 border-b border-white/[0.05] last:border-none transition-all`
   el.draggable = true
@@ -191,8 +197,8 @@ function createTaskElement(task, index, currentProjectId) {
   el.dataset.projectId = task.projectId || currentProjectId
   el.dataset.index = index
 
-  const prioColor = task.priority === 'high' ? '#ff6b81' : task.priority === 'medium' ? '#fbbf24' : '#34d399'
-  const prioBg = task.priority === 'high' ? 'rgba(255,107,129,0.1)' : task.priority === 'medium' ? 'rgba(251,191,36,0.1)' : 'rgba(52,211,153,0.1)'
+  const prioColor = getPriorityColor(task.priority)
+  const prioBg = getPriorityBg(task.priority)
   const due = formatDueDate(task.dueDate)
   const dueBadge = due
     ? `<span data-action="edit-due" class="font-semibold px-2.5 py-1 rounded-lg text-[10px] cursor-pointer whitespace-nowrap transition-all hover:brightness-125" style="background:${due.color}12; color:${due.color}; border: 1px solid ${due.color}25">${due.text}</span>`
@@ -271,9 +277,7 @@ async function handleTaskClick(e) {
 
   if (action === 'toggle') {
     const wasLast = await toggleTask(taskId, projectId)
-    renderTasksList()
-    renderSidebar()
-    renderStats()
+    refreshAll()
     if (wasLast) {
       setTimeout(() => triggerConfetti(), 180)
       showToast("All tasks complete — nice work!")
@@ -282,23 +286,19 @@ async function handleTaskClick(e) {
     startInlineEdit(row.querySelector('[data-action="edit-title"]'), taskId, projectId)
   } else if (action === 'cycle-priority') {
     await cycleTaskPriority(taskId, projectId)
-    renderTasksList()
+    refreshAll()
   } else if (action === 'edit-due') {
     e.stopImmediatePropagation()
     const state = getState()
     const task = (state.tasks[projectId] || []).find(t => t.id === taskId)
     openDatePicker(task?.dueDate, async (newDate) => {
       await editTaskDueDate(taskId, newDate, projectId)
-      renderTasksList()
-      renderSidebar()
-      renderStats()
+      refreshAll()
     })
   } else if (action === 'delete') {
     e.stopImmediatePropagation()
     await deleteTask(taskId, projectId)
-    renderTasksList()
-    renderSidebar()
-    renderStats()
+    refreshAll()
   }
 }
 

@@ -61,6 +61,20 @@ export function timeAgo(dateStr) {
   return Math.floor(seconds / 86400) + 'd ago';
 }
 
+/** Priority color mapping */
+export function getPriorityColor(priority) {
+  if (priority === 'high') return '#ff6b81'
+  if (priority === 'medium') return '#fbbf24'
+  return '#34d399'
+}
+
+/** Priority background color mapping */
+export function getPriorityBg(priority) {
+  if (priority === 'high') return 'rgba(255,107,129,0.1)'
+  if (priority === 'medium') return 'rgba(251,191,36,0.1)'
+  return 'rgba(52,211,153,0.1)'
+}
+
 /** Simple confetti burst */
 export function triggerConfetti() {
   const colors = ['#6366f1', '#a855f7', '#ec4899', '#22c55e', '#f59e0b'];

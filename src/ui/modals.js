@@ -4,12 +4,18 @@
 import { getState } from '../core/state.js'
 import { createProject, projectNameExists } from '../features/projects.js'
 import { restoreTask, permanentlyDeleteArchivedTask, clearCompletedTasks } from '../features/tasks.js'
-import { renderSidebar } from './sidebar.js'
 import { renderTasksList } from './taskList.js'
-import { renderStats } from './stats.js'
 import { PROJECT_COLORS, restartMainContentAnimations, showToast } from '../utils/helpers.js'
 
 let selectedColor = PROJECT_COLORS[0]
+
+/**
+ * Dispatch a single event that main.js already listens for,
+ * instead of manually calling renderSidebar + renderStats + renderTasksList everywhere.
+ */
+function refreshAll() {
+  window.dispatchEvent(new CustomEvent('praxis-refresh'))
+}
 
 export function showNewProjectModal() {
   const modal = document.getElementById('new-project-modal')
@@ -74,21 +80,13 @@ export async function createProjectFromModal() {
 
   const project = await createProject(name, selectedColor)
 
-  // Clear input + errors before hiding (hideNewProjectModal also cleans, but explicit is safe)
-  if (input) {
-    input.value = ''
-    input.classList.remove('!border-rose-500')
-  }
-
   hideNewProjectModal()
 
   // Select it immediately
   window.currentProjectId = project.id
   window.currentSearch = ''
 
-  renderSidebar()
-  renderTasksList()
-  renderStats()
+  refreshAll()
   restartMainContentAnimations()
 }
 
@@ -155,16 +153,13 @@ function renderArchiveList() {
     row.querySelector('.restore-btn').onclick = async () => {
       await restoreTask(task.id)
       renderArchiveList()
-      renderTasksList()
-      renderSidebar()
-      renderStats()
+      refreshAll()
     }
     row.querySelector('.delete-btn').onclick = async () => {
       if (confirm('Delete this archived task forever?')) {
         await permanentlyDeleteArchivedTask(task.id)
         renderArchiveList()
         renderTasksList()
-        renderSidebar()
       }
     }
 
