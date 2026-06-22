@@ -1,34 +1,46 @@
 const express = require('express');
 const router = express.Router();
-const fs = require('fs');
-const path = require('path');
 const auth = require('../middleware/auth');
 const Task = require('../models/Task');
 const Project = require('../models/Project');
-
-const CONFIG_PATH = path.join(__dirname, '../config/integration.json');
-
-// Helper to ensure config dir exists
-function ensureDirExists(filePath) {
-  const dirname = path.dirname(filePath);
-  if (!fs.existsSync(dirname)) {
-    fs.mkdirSync(dirname, { recursive: true });
-  }
-}
+const Integration = require('../models/Integration');
+const jwt = require('jsonwebtoken');
 
 /**
  * GET /api/tasks/external/config
  * Retrieves the saved configuration for Mattermost integration.
- * Requires user authentication.
+ * Supports token auth or returns the first config for local daemon listener.
  */
-router.get('/config', auth, (req, res) => {
+router.get('/config', async (req, res) => {
   try {
-    if (!fs.existsSync(CONFIG_PATH)) {
+    const authHeader = req.header('Authorization');
+    let userId = null;
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      try {
+        const verified = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret_for_development');
+        userId = verified.id;
+      } catch (err) {
+        // Ignore token verification errors and proceed as unauthenticated
+      }
+    }
+
+    let integration;
+    if (userId) {
+      integration = await Integration.findOne({ userId });
+    } else {
+      integration = await Integration.findOne({});
+    }
+
+    if (!integration) {
       return res.json({ mattermost_ws_url: '', mmauthtoken: '' });
     }
-    const raw = fs.readFileSync(CONFIG_PATH, 'utf8');
-    const data = JSON.parse(raw);
-    return res.json(data);
+
+    return res.json({
+      userId: integration.userId,
+      mattermost_ws_url: integration.mattermost_ws_url,
+      mmauthtoken: integration.mmauthtoken
+    });
   } catch (err) {
     console.error('[API Integration] Error reading config:', err);
     return res.status(500).json({ error: 'Failed to read integration config' });
@@ -38,19 +50,28 @@ router.get('/config', auth, (req, res) => {
 /**
  * POST /api/tasks/external/config
  * Saves/Updates the Mattermost integration configuration.
- * Requires user authentication and stores the user's ID.
+ * Requires user authentication and stores the user's ID in MongoDB.
  */
-router.post('/config', auth, (req, res) => {
+router.post('/config', auth, async (req, res) => {
   try {
     const { mattermost_ws_url, mmauthtoken } = req.body;
-    const data = {
-      userId: req.user.id, // Store who configured this integration
-      mattermost_ws_url: mattermost_ws_url || '',
-      mmauthtoken: mmauthtoken || ''
-    };
-    ensureDirExists(CONFIG_PATH);
-    fs.writeFileSync(CONFIG_PATH, JSON.stringify(data, null, 2), 'utf8');
-    console.log(`[API Integration] Saved configuration for user ${req.user.id}`);
+    const userId = req.user.id;
+
+    let integration = await Integration.findOne({ userId });
+    if (integration) {
+      integration.mattermost_ws_url = mattermost_ws_url || '';
+      integration.mmauthtoken = mmauthtoken || '';
+      await integration.save();
+    } else {
+      integration = new Integration({
+        userId,
+        mattermost_ws_url: mattermost_ws_url || '',
+        mmauthtoken: mmauthtoken || ''
+      });
+      await integration.save();
+    }
+
+    console.log(`[API Integration] Saved configuration for user ${userId} to MongoDB`);
     return res.json({ success: true, message: 'Configuration saved successfully' });
   } catch (err) {
     console.error('[API Integration] Error saving config:', err);
@@ -82,16 +103,15 @@ router.post('/', async (req, res, next) => {
       });
     }
 
-    // Load integration config to resolve the userId
-    if (!fs.existsSync(CONFIG_PATH)) {
+    // Load integration config from DB to resolve the userId
+    const integration = await Integration.findOne({});
+    if (!integration) {
       return res.status(400).json({
         success: false,
         error: 'Integration is not configured. Please configure via the web UI.'
       });
     }
-    const configRaw = fs.readFileSync(CONFIG_PATH, 'utf8');
-    const config = JSON.parse(configRaw);
-    const targetUserId = config.userId;
+    const targetUserId = integration.userId;
 
     if (!targetUserId) {
       return res.status(400).json({

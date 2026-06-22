@@ -7,14 +7,15 @@
 import WebSocket from 'ws';
 
 // CONFIGURATION
+const API_BASE = process.env.PRAXIS_API_URL || 'http://localhost:5001';
 const CONFIG = {
   // Fallbacks (if config endpoint is empty)
   MATTERMOST_WS_URL: '',
   MMAUTHTOKEN: '',
   
-  // API endpoints (Express backend runs on port 5001 by default)
-  CONFIG_API_URL: 'http://localhost:5001/api/tasks/external/config',
-  WEB_APP_API_URL: 'http://localhost:5001/api/tasks/external',
+  // API endpoints
+  CONFIG_API_URL: `${API_BASE}/api/tasks/external/config`,
+  WEB_APP_API_URL: `${API_BASE}/api/tasks/external`,
   
   // Reconnection Rules
   RECONNECT_INITIAL_DELAY: 1000, // 1 second
