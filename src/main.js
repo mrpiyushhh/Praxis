@@ -384,6 +384,47 @@ function wireAppEvents() {
     }
   })
 
+  // Copy Integrations Info
+  document.getElementById('copy-endpoint-btn')?.addEventListener('click', () => {
+    const endpoint = document.getElementById('integration-endpoint-display')?.textContent || '';
+    navigator.clipboard.writeText(endpoint)
+      .then(() => showToast('API Endpoint copied to clipboard!'))
+      .catch(() => showToast('Failed to copy.'));
+  });
+
+  document.getElementById('copy-cmd-btn')?.addEventListener('click', () => {
+    const cmd = document.getElementById('integration-cmd-display')?.textContent || '';
+    navigator.clipboard.writeText(cmd)
+      .then(() => showToast('Local daemon command copied!'))
+      .catch(() => showToast('Failed to copy.'));
+  });
+
+  // Save Integrations Config
+  document.getElementById('save-integration-btn')?.addEventListener('click', () => {
+    const mattermost_ws_url = document.getElementById('integration-ws-url-input')?.value || '';
+    const mmauthtoken = document.getElementById('integration-token-input')?.value || '';
+    
+    fetch('/api/tasks/external/config', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ mattermost_ws_url, mmauthtoken })
+    })
+      .then(res => res.json())
+      .then(result => {
+        if (result.success) {
+          showToast('Mattermost configuration saved!');
+        } else {
+          showToast('Failed to save configuration.');
+        }
+      })
+      .catch(err => {
+        console.error('[Integrations] Error saving config:', err);
+        showToast('Error communicating with backend.');
+      });
+  });
+
   // Sidebar Toggle — button lives inside the sidebar header
   const toggleBtn = document.getElementById('sidebar-toggle-btn')
   const backdrop = document.getElementById('sidebar-backdrop')
@@ -581,6 +622,25 @@ function showProfileModal() {
   } else {
     pwSection.classList.remove('hidden')
   }
+
+  // Populate dynamic API integration endpoint URL
+  const endpointDisplay = document.getElementById('integration-endpoint-display')
+  if (endpointDisplay) {
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    const backendOrigin = isLocal ? 'http://localhost:5001' : window.location.origin
+    endpointDisplay.textContent = `${backendOrigin}/api/tasks/external`
+  }
+
+  // Fetch and populate current configuration
+  fetch('/api/tasks/external/config')
+    .then(res => res.json())
+    .then(config => {
+      const urlInput = document.getElementById('integration-ws-url-input')
+      const tokenInput = document.getElementById('integration-token-input')
+      if (urlInput) urlInput.value = config.mattermost_ws_url || ''
+      if (tokenInput) tokenInput.value = config.mmauthtoken || ''
+    })
+    .catch(err => console.error('[Integrations] Error loading config:', err))
 
   modal.classList.remove('hidden')
   modal.classList.add('flex')

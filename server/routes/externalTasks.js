@@ -1,5 +1,56 @@
 const express = require('express');
 const router = express.Router();
+const fs = require('fs');
+const path = require('path');
+
+const CONFIG_PATH = path.join(__dirname, '../config/integration.json');
+
+// Helper to ensure config dir exists
+function ensureDirExists(filePath) {
+  const dirname = path.dirname(filePath);
+  if (!fs.existsSync(dirname)) {
+    fs.mkdirSync(dirname, { recursive: true });
+  }
+}
+
+/**
+ * GET /api/tasks/external/config
+ * Retrieves the saved configuration for Mattermost integration.
+ */
+router.get('/config', (req, res) => {
+  try {
+    if (!fs.existsSync(CONFIG_PATH)) {
+      return res.json({ mattermost_ws_url: '', mmauthtoken: '' });
+    }
+    const raw = fs.readFileSync(CONFIG_PATH, 'utf8');
+    const data = JSON.parse(raw);
+    return res.json(data);
+  } catch (err) {
+    console.error('[API Integration] Error reading config:', err);
+    return res.status(500).json({ error: 'Failed to read integration config' });
+  }
+});
+
+/**
+ * POST /api/tasks/external/config
+ * Saves/Updates the Mattermost integration configuration.
+ */
+router.post('/config', (req, res) => {
+  try {
+    const { mattermost_ws_url, mmauthtoken } = req.body;
+    const data = {
+      mattermost_ws_url: mattermost_ws_url || '',
+      mmauthtoken: mmauthtoken || ''
+    };
+    ensureDirExists(CONFIG_PATH);
+    fs.writeFileSync(CONFIG_PATH, JSON.stringify(data, null, 2), 'utf8');
+    console.log('[API Integration] Updated Mattermost config details.');
+    return res.json({ success: true, message: 'Configuration saved successfully' });
+  } catch (err) {
+    console.error('[API Integration] Error saving config:', err);
+    return res.status(500).json({ error: 'Failed to save integration config' });
+  }
+});
 
 /**
  * POST /api/tasks/external

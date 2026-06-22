@@ -20,12 +20,13 @@ const customFetch = typeof globalThis.fetch === 'function'
 
 // CONFIGURATION
 const CONFIG = {
-  // Mattermost Settings
-  MATTERMOST_WS_URL: 'wss://your-mattermost-instance.com/api/v4/websocket',
-  MMAUTHTOKEN: 'your_mmauthtoken_here', // Extract from browser cookies
+  // Fallbacks (if config endpoint is empty)
+  MATTERMOST_WS_URL: '',
+  MMAUTHTOKEN: '',
   
-  // Custom Web App Settings (matching our Praxis endpoint)
-  WEB_APP_API_URL: 'http://localhost:3000/api/tasks/external',
+  // API endpoints (Express backend runs on port 5001 by default)
+  CONFIG_API_URL: 'http://localhost:5001/api/tasks/external/config',
+  WEB_APP_API_URL: 'http://localhost:5001/api/tasks/external',
   
   // Reconnection Rules
   RECONNECT_INITIAL_DELAY: 1000, // 1 second
@@ -35,14 +36,49 @@ const CONFIG = {
 
 let ws = null;
 let reconnectDelay = CONFIG.RECONNECT_INITIAL_DELAY;
+let wsUrl = '';
+let token = '';
+
+/**
+ * Fetch config details from the Web App API on boot
+ */
+async function initializeAndConnect() {
+  console.log(`[Listener] Fetching configuration from web app API at ${CONFIG.CONFIG_API_URL}...`);
+  try {
+    const res = await customFetch(CONFIG.CONFIG_API_URL);
+    const config = await res.json();
+    
+    wsUrl = config.mattermost_ws_url || CONFIG.MATTERMOST_WS_URL;
+    token = config.mmauthtoken || CONFIG.MMAUTHTOKEN;
+
+    if (!wsUrl || !token) {
+      console.error('\n[Listener] Error: Mattermost WS URL and Session Token must be configured in the web app UI first!');
+      console.error(`Please open http://localhost:5173 (or your dev web server) -> Profile Modal -> Integrations, paste details, save, and restart this listener.\n`);
+      process.exit(1);
+    }
+    
+    console.log('[Listener] Configuration loaded successfully.');
+    connect();
+  } catch (err) {
+    console.warn(`[Listener] Warning: Failed to connect to configuration API (${err.message}). Using hardcoded fallback values if present.`);
+    wsUrl = CONFIG.MATTERMOST_WS_URL;
+    token = CONFIG.MMAUTHTOKEN;
+    
+    if (!wsUrl || !token) {
+      console.error('[Listener] Error: Fallback configuration is empty. Exiting.');
+      process.exit(1);
+    }
+    connect();
+  }
+}
 
 /**
  * Initializes the WebSocket connection to Mattermost
  */
 function connect() {
-  console.log(`[Listener] Connecting to Mattermost WebSocket at ${CONFIG.MATTERMOST_WS_URL}...`);
+  console.log(`[Listener] Connecting to Mattermost WebSocket at ${wsUrl}...`);
   
-  ws = new WebSocket(CONFIG.MATTERMOST_WS_URL);
+  ws = new WebSocket(wsUrl);
 
   // Connection opened
   ws.on('open', () => {
@@ -54,7 +90,7 @@ function connect() {
       seq: 1,
       action: 'authentication_challenge',
       data: {
-        token: CONFIG.MMAUTHTOKEN
+        token: token
       }
     };
     ws.send(JSON.stringify(authPayload));
@@ -158,5 +194,5 @@ async function forwardTaskToWebApp(taskTitle) {
   }
 }
 
-// Start listener
-connect();
+// Start listener config fetch
+initializeAndConnect();
