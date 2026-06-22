@@ -21,6 +21,7 @@ app.use(async (req, res, next) => {
 
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/projects', require('./routes/projects'));
+app.use('/api/tasks/external', require('./routes/externalTasks'));
 app.use('/api/tasks', require('./routes/tasks'));
 
 app.get('/api', (req, res) => {
