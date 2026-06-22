@@ -13,4 +13,7 @@ const TaskSchema = new mongoose.Schema({
   archivedAt: { type: Date }
 });
 
+TaskSchema.index({ userId: 1, id: 1 }, { unique: true });
+TaskSchema.index({ userId: 1, projectId: 1 });
+
 module.exports = mongoose.model('Task', TaskSchema);

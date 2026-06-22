@@ -16,16 +16,17 @@ router.get('/:userId', auth, async (req, res) => {
 
 // Create or update a project
 router.post('/', auth, async (req, res) => {
-  const { id, name } = req.body;
+  const { id, name, color } = req.body;
   const userId = req.user.id; // Enforce security using token
 
   try {
     let project = await Project.findOne({ userId, id });
     if (project) {
       project.name = name;
+      if (color) project.color = color;
       await project.save();
     } else {
-      project = new Project({ userId, id, name });
+      project = new Project({ userId, id, name, color });
       await project.save();
     }
     res.status(201).json(project);

@@ -65,36 +65,41 @@ export async function addProject(project) {
   const user = getCurrentUserSync()
   if (!user) return project
 
-  try {
-    const savedProject = await apiPost('/projects', { ...project, userId: user.id })
-    state.projects.unshift(savedProject)
-    state.tasks[savedProject.id] = []
-    saveState()
-    return savedProject
-  } catch (err) {
-    console.error('[State] Failed to add project to API', err)
-    state.projects.unshift(project)
-    state.tasks[project.id] = []
-    saveState()
-    return project
-  }
+  // Optimistic update
+  state.projects.unshift(project)
+  state.tasks[project.id] = []
+  saveState()
+
+  // Background API call
+  apiPost('/projects', { ...project, userId: user.id })
+    .then(savedProject => {
+      const idx = state.projects.findIndex(p => p.id === project.id)
+      if (idx >= 0) {
+        state.projects[idx] = savedProject
+        saveState()
+      }
+    })
+    .catch(err => {
+      console.error('[State] Failed to add project to API', err)
+    })
+
+  return project
 }
 
 export async function deleteProject(projectId) {
   const user = getCurrentUserSync()
   if (!user) return
 
-  try {
-    await apiDelete(`/projects/${user.id}/${projectId}`)
-    state.projects = state.projects.filter(p => p.id !== projectId)
-    delete state.tasks[projectId]
-    saveState()
-  } catch (err) {
-    console.error('[State] Failed to delete project from API', err)
-    state.projects = state.projects.filter(p => p.id !== projectId)
-    delete state.tasks[projectId]
-    saveState()
-  }
+  // Optimistic update
+  state.projects = state.projects.filter(p => p.id !== projectId)
+  delete state.tasks[projectId]
+  saveState()
+
+  // Background API call
+  apiDelete(`/projects/${user.id}/${projectId}`)
+    .catch(err => {
+      console.error('[State] Failed to delete project from API', err)
+    })
 }
 
 export async function renameProject(projectId, newName) {
@@ -104,17 +109,21 @@ export async function renameProject(projectId, newName) {
   const project = state.projects.find(p => p.id === projectId)
   if (!project) return null
 
-  try {
-    const updatedProject = await apiPost('/projects', { ...project, userId: user.id, name: newName.trim() })
-    project.name = updatedProject.name
-    saveState()
-    return project.name
-  } catch (err) {
-    console.error('[State] Failed to rename project on API', err)
-    project.name = newName.trim()
-    saveState()
-    return project.name
-  }
+  // Optimistic update
+  project.name = newName.trim()
+  saveState()
+
+  // Background API call
+  apiPost('/projects', { ...project, userId: user.id })
+    .then(updatedProject => {
+      project.name = updatedProject.name
+      saveState()
+    })
+    .catch(err => {
+      console.error('[State] Failed to rename project on API', err)
+    })
+
+  return project.name
 }
 
 export function reorderProjects(fromIndex, toIndex) {
@@ -203,19 +212,26 @@ export async function addTask(projectId, task) {
   const user = getCurrentUserSync()
   if (!user) return task
 
-  try {
-    const savedTask = await apiPost('/tasks', { ...task, projectId, userId: user.id })
-    if (!state.tasks[projectId]) state.tasks[projectId] = []
-    state.tasks[projectId].unshift(savedTask)
-    saveState()
-    return savedTask
-  } catch (err) {
-    console.error('[State] Failed to add task to API', err)
-    if (!state.tasks[projectId]) state.tasks[projectId] = []
-    state.tasks[projectId].unshift(task)
-    saveState()
-    return task
-  }
+  // Optimistic update
+  if (!state.tasks[projectId]) state.tasks[projectId] = []
+  state.tasks[projectId].unshift(task)
+  saveState()
+
+  // Background API call
+  apiPost('/tasks', { ...task, projectId, userId: user.id })
+    .then(savedTask => {
+      const idx = state.tasks[projectId].findIndex(t => t.id === task.id)
+      if (idx >= 0) {
+        state.tasks[projectId][idx] = savedTask
+        saveState()
+        window.dispatchEvent(new CustomEvent('praxis-refresh'))
+      }
+    })
+    .catch(err => {
+      console.error('[State] Failed to add task to API', err)
+    })
+
+  return task
 }
 
 export async function updateTask(projectId, taskId, updates) {
@@ -226,34 +242,39 @@ export async function updateTask(projectId, taskId, updates) {
   const task = tasks.find(t => t.id === taskId)
   if (!task) return null
 
-  try {
-    const updatedTask = await apiPost('/tasks', { ...task, ...updates, userId: user.id })
-    Object.assign(task, updatedTask)
-    saveState()
-    return task
-  } catch (err) {
-    console.error('[State] Failed to update task on API', err)
-    Object.assign(task, updates)
-    saveState()
-    return task
-  }
+  // Optimistic update
+  Object.assign(task, updates)
+  saveState()
+
+  // Background API call
+  apiPost('/tasks', { ...task, userId: user.id })
+    .then(updatedTask => {
+      Object.assign(task, updatedTask)
+      saveState()
+      window.dispatchEvent(new CustomEvent('praxis-refresh'))
+    })
+    .catch(err => {
+      console.error('[State] Failed to update task on API', err)
+    })
+
+  return task
 }
 
 export async function deleteTask(projectId, taskId) {
   const user = getCurrentUserSync()
   if (!user) return
 
-  try {
-    await apiDelete(`/tasks/${user.id}/${taskId}`)
-    if (!state.tasks[projectId]) return
-    state.tasks[projectId] = state.tasks[projectId].filter(t => t.id !== taskId)
-    saveState()
-  } catch (err) {
-    console.error('[State] Failed to delete task from API', err)
-    if (!state.tasks[projectId]) return
+  // Optimistic update
+  if (state.tasks[projectId]) {
     state.tasks[projectId] = state.tasks[projectId].filter(t => t.id !== taskId)
     saveState()
   }
+
+  // Background API call
+  apiDelete(`/tasks/${user.id}/${taskId}`)
+    .catch(err => {
+      console.error('[State] Failed to delete task from API', err)
+    })
 }
 
 export function reorderTasks(projectId, fromIndex, toIndex) {
@@ -279,15 +300,15 @@ export async function toggleTaskComplete(projectId, taskId) {
     archivedAt: task.archivedAt || new Date().toISOString()
   }
 
-  try {
-    await apiPost('/tasks', { ...task, ...updates, userId: user.id })
-    Object.assign(task, updates)
-    saveState()
-  } catch (err) {
-    console.error('[State] Failed to toggle task complete on API', err)
-    Object.assign(task, updates)
-    saveState()
-  }
+  // Optimistic update
+  Object.assign(task, updates)
+  saveState()
+
+  // Background API call
+  apiPost('/tasks', { ...task, userId: user.id })
+    .catch(err => {
+      console.error('[State] Failed to toggle task complete on API', err)
+    })
 
   const remainingActive = tasks.filter(t => !t.completed).length
   return { wasLastActive: !wasCompleted && remainingActive === 0 }
@@ -306,17 +327,16 @@ export async function restoreTask(projectId, taskId) {
     archivedAt: null
   }
 
-  try {
-    await apiPost('/tasks', { ...task, ...updates, userId: user.id })
-    task.completed = false
-    delete task.archivedAt
-    saveState()
-  } catch (err) {
-    console.error('[State] Failed to restore task on API', err)
-    task.completed = false
-    delete task.archivedAt
-    saveState()
-  }
+  // Optimistic update
+  task.completed = false
+  delete task.archivedAt
+  saveState()
+
+  // Background API call
+  apiPost('/tasks', { ...task, ...updates, userId: user.id })
+    .catch(err => {
+      console.error('[State] Failed to restore task on API', err)
+    })
 }
 
 export async function permanentlyDeleteTask(projectId, taskId) {
@@ -330,15 +350,14 @@ export async function clearAllArchived(projectId) {
   if (!state.tasks[projectId]) return
   const archivedTasks = state.tasks[projectId].filter(t => t.completed)
   
-  // We should ideally have a bulk delete API, but for now we delete one by one
-  for (const task of archivedTasks) {
-    try {
-      await apiDelete(`/tasks/${user.id}/${task.id}`)
-    } catch (err) {
-      console.error(`[State] Failed to delete archived task ${task.id}`, err)
-    }
-  }
-
+  // Optimistic update
   state.tasks[projectId] = state.tasks[projectId].filter(t => !t.completed)
   saveState()
+
+  // Parallel delete requests in background
+  Promise.all(archivedTasks.map(task =>
+    apiDelete(`/tasks/${user.id}/${task.id}`).catch(err =>
+      console.error(`[State] Failed to delete archived task ${task.id}`, err)
+    )
+  ))
 }
