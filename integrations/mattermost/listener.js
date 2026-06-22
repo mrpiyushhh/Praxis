@@ -4,19 +4,7 @@
  * Run this locally as a background daemon (e.g. using pm2).
  */
 
-const WebSocket = require('ws');
-
-// Use global native fetch (Node 18+) or fallback to node-fetch if available
-const customFetch = typeof globalThis.fetch === 'function' 
-  ? globalThis.fetch 
-  : (() => {
-      try {
-        return require('node-fetch');
-      } catch (err) {
-        console.error('[Listener] Error: node-fetch is required on Node versions < 18. Run "npm install node-fetch".');
-        process.exit(1);
-      }
-    })();
+import WebSocket from 'ws';
 
 // CONFIGURATION
 const CONFIG = {
@@ -45,7 +33,7 @@ let token = '';
 async function initializeAndConnect() {
   console.log(`[Listener] Fetching configuration from web app API at ${CONFIG.CONFIG_API_URL}...`);
   try {
-    const res = await customFetch(CONFIG.CONFIG_API_URL);
+    const res = await fetch(CONFIG.CONFIG_API_URL);
     const config = await res.json();
     
     wsUrl = config.mattermost_ws_url || CONFIG.MATTERMOST_WS_URL;
@@ -175,7 +163,7 @@ async function forwardTaskToWebApp(taskTitle) {
 
   try {
     console.log(`[Listener] Forwarding task to API: "${taskTitle}"`);
-    const response = await customFetch(CONFIG.WEB_APP_API_URL, {
+    const response = await fetch(CONFIG.WEB_APP_API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
