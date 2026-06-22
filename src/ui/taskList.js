@@ -287,7 +287,9 @@ async function handleTaskClick(e) {
       showToast("All tasks complete — nice work!")
     }
   } else if (action === 'edit-title') {
-    startInlineEdit(row.querySelector('[data-action="edit-title"]'), taskId, projectId)
+    const editEl = row.querySelector('[data-action="edit-title"]')
+    if (editEl && editEl.isContentEditable) return
+    startInlineEdit(editEl, taskId, projectId)
   } else if (action === 'cycle-priority') {
     await cycleTaskPriority(taskId, projectId)
     refreshAll()
@@ -308,6 +310,9 @@ async function handleTaskClick(e) {
 
 function startInlineEdit(element, taskId, projectId) {
   const original = element.textContent.trim()
+  const row = element.closest('.task-row')
+  if (row) row.draggable = false
+
   element.contentEditable = true
   element.focus()
 
@@ -319,9 +324,11 @@ function startInlineEdit(element, taskId, projectId) {
 
   async function finish() {
     element.contentEditable = false
+    if (row) row.draggable = true
     const newTitle = element.textContent.trim()
     if (newTitle && newTitle !== original) {
       await editTaskTitle(taskId, newTitle, projectId)
+      refreshAll()
     } else {
       element.textContent = original
     }

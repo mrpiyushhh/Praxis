@@ -190,7 +190,7 @@ function renderEverything() {
     if (taskInput) taskInput.style.display = 'none'
     if (activeHeader) activeHeader.style.display = 'none'
     if (taskListContainer) {
-      taskListContainer.className = 'grid grid-cols-1 lg:grid-cols-3 gap-5 stagger-6'
+      taskListContainer.className = 'grid grid-cols-1 lg:grid-cols-3 gap-5'
     }
   } else {
     if (statsRow) statsRow.style.display = ''

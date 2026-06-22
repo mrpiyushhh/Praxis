@@ -156,6 +156,14 @@ export function restartMainContentAnimations() {
   const activeHeader = document.getElementById('active-tasks-header')
   const taskListCard = document.getElementById('task-list-container')
 
+  if (window.currentProjectId === 'urgent') {
+    if (taskListCard) {
+      taskListCard.classList.remove('stagger-6')
+      delete taskListCard.dataset.view
+    }
+    return
+  }
+
   restartStaggerAnimation(inputCard, 'stagger-4')
   restartStaggerAnimation(activeHeader, 'stagger-5')
   restartStaggerAnimation(taskListCard, 'stagger-6')
