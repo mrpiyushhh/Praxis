@@ -404,8 +404,9 @@ function wireAppEvents() {
   document.getElementById('save-integration-btn')?.addEventListener('click', () => {
     const mattermost_ws_url = document.getElementById('integration-ws-url-input')?.value || '';
     const mmauthtoken = document.getElementById('integration-token-input')?.value || '';
+    const enabled = document.getElementById('integration-enabled-toggle')?.checked || false;
     
-    apiPost('/tasks/external/config', { mattermost_ws_url, mmauthtoken })
+    apiPost('/tasks/external/config', { mattermost_ws_url, mmauthtoken, enabled })
       .then(result => {
         if (result.success) {
           showToast('Mattermost configuration saved!');
@@ -617,10 +618,17 @@ function showProfileModal() {
     pwSection.classList.remove('hidden')
   }
 
+  // Show vercel warning if not on localhost
+  const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  const vercelWarning = document.getElementById('vercel-sync-warning')
+  if (vercelWarning) {
+    if (isLocal) vercelWarning.classList.add('hidden')
+    else vercelWarning.classList.remove('hidden')
+  }
+
   // Populate dynamic API integration endpoint URL
   const endpointDisplay = document.getElementById('integration-endpoint-display')
   if (endpointDisplay) {
-    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     const backendOrigin = isLocal ? 'http://localhost:5001' : window.location.origin
     endpointDisplay.textContent = `${backendOrigin}/api/tasks/external`
   }
@@ -630,8 +638,11 @@ function showProfileModal() {
     .then(config => {
       const urlInput = document.getElementById('integration-ws-url-input')
       const tokenInput = document.getElementById('integration-token-input')
+      const enabledToggle = document.getElementById('integration-enabled-toggle')
+      
       if (urlInput) urlInput.value = config.mattermost_ws_url || ''
       if (tokenInput) tokenInput.value = config.mmauthtoken || ''
+      if (enabledToggle) enabledToggle.checked = config.enabled || false
     })
     .catch(err => console.error('[Integrations] Error loading config:', err))
 

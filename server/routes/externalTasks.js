@@ -33,13 +33,14 @@ router.get('/config', async (req, res) => {
     }
 
     if (!integration) {
-      return res.json({ mattermost_ws_url: '', mmauthtoken: '' });
+      return res.json({ mattermost_ws_url: '', mmauthtoken: '', enabled: false });
     }
 
     return res.json({
       userId: integration.userId,
       mattermost_ws_url: integration.mattermost_ws_url,
-      mmauthtoken: integration.mmauthtoken
+      mmauthtoken: integration.mmauthtoken,
+      enabled: integration.enabled || false
     });
   } catch (err) {
     console.error('[API Integration] Error reading config:', err);
@@ -54,25 +55,37 @@ router.get('/config', async (req, res) => {
  */
 router.post('/config', auth, async (req, res) => {
   try {
-    const { mattermost_ws_url, mmauthtoken } = req.body;
+    const { mattermost_ws_url, mmauthtoken, enabled } = req.body;
     const userId = req.user.id;
 
     let integration = await Integration.findOne({ userId });
     if (integration) {
       integration.mattermost_ws_url = mattermost_ws_url || '';
       integration.mmauthtoken = mmauthtoken || '';
+      if (enabled !== undefined) {
+        integration.enabled = enabled;
+      }
       await integration.save();
     } else {
       integration = new Integration({
         userId,
         mattermost_ws_url: mattermost_ws_url || '',
-        mmauthtoken: mmauthtoken || ''
+        mmauthtoken: mmauthtoken || '',
+        enabled: enabled || false
       });
       await integration.save();
     }
 
-    console.log(`[API Integration] Saved configuration for user ${userId} to MongoDB`);
-    return res.json({ success: true, message: 'Configuration saved successfully' });
+    // Start/Stop the backend service dynamically based on toggle state
+    const mattermostListener = require('../services/mattermostListener');
+    if (integration.enabled) {
+      await mattermostListener.start(userId);
+    } else {
+      mattermostListener.stop();
+    }
+
+    console.log(`[API Integration] Saved configuration for user ${userId} to MongoDB (Enabled: ${integration.enabled})`);
+    return res.json({ success: true, message: 'Configuration saved successfully', enabled: integration.enabled });
   } catch (err) {
     console.error('[API Integration] Error saving config:', err);
     return res.status(500).json({ error: 'Failed to save integration config' });
