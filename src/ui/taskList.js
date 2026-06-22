@@ -44,10 +44,15 @@ export function renderTasksList() {
   container.innerHTML = ''
 
   if (projectId === 'urgent') {
-    container.className = 'grid grid-cols-1 lg:grid-cols-3 gap-5 stagger-6'
+    // Only add the entrance animation when first switching into focus view
+    const isFirstRender = container.dataset.view !== 'urgent'
+    container.dataset.view = 'urgent'
+    container.className = 'grid grid-cols-1 lg:grid-cols-3 gap-5' + (isFirstRender ? ' stagger-6' : '')
     renderTimeGroupedTasks(container, filtered)
   } else {
-    container.className = 'glass-card-elevated rounded-2xl overflow-hidden border border-white/[0.1] min-h-[280px] stagger-6'
+    const isFirstRender = container.dataset.view !== projectId
+    container.dataset.view = projectId || ''
+    container.className = 'glass-card-elevated rounded-2xl overflow-hidden border border-white/[0.1] min-h-[280px]' + (isFirstRender ? ' stagger-6' : '')
     
     if (filtered.length === 0) {
       container.innerHTML = `

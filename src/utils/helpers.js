@@ -159,4 +159,7 @@ export function restartMainContentAnimations() {
   restartStaggerAnimation(inputCard, 'stagger-4')
   restartStaggerAnimation(activeHeader, 'stagger-5')
   restartStaggerAnimation(taskListCard, 'stagger-6')
+
+  // Reset view tracking so the next render plays the entrance animation
+  if (taskListCard) delete taskListCard.dataset.view
 }
