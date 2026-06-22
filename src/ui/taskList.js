@@ -94,14 +94,14 @@ function renderTimeGroupedTasks(container, tasks) {
   const state = getState()
   const projectsMap = Object.fromEntries(state.projects.map(p => [p.id, p]))
 
-  container.appendChild(createFocusColumn('Overdue', overdue, '#ff6b81', 'running_with_errors', projectsMap))
-  container.appendChild(createFocusColumn('Today', dueToday, '#fbbf24', 'today', projectsMap))
-  container.appendChild(createFocusColumn('Tomorrow', dueTomorrow, '#60a5fa', 'event_upcoming', projectsMap))
+  container.appendChild(createFocusColumn('Overdue', overdue, '#ff6b81', 'running_with_errors', projectsMap, 'stagger-1'))
+  container.appendChild(createFocusColumn('Today', dueToday, '#fbbf24', 'today', projectsMap, 'stagger-2'))
+  container.appendChild(createFocusColumn('Tomorrow', dueTomorrow, '#60a5fa', 'event_upcoming', projectsMap, 'stagger-3'))
 }
 
-function createFocusColumn(title, tasks, color, icon, projectsMap) {
+function createFocusColumn(title, tasks, color, icon, projectsMap, staggerClass = '') {
   const col = document.createElement('div')
-  col.className = 'focus-column min-w-0'
+  col.className = `focus-column min-w-0 ${staggerClass}`.trim()
   
   const emptyState = tasks.length === 0 ? `
     <div class="flex flex-col items-center justify-center py-10 opacity-30">
