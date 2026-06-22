@@ -9,7 +9,8 @@ let currentUser = null
 
 export function getCurrentUser() {
   const userId = getItem(STORAGE_KEYS.CURRENT_USER_ID)
-  if (!userId) return null
+  const token = getItem(STORAGE_KEYS.AUTH_TOKEN)
+  if (!userId || !token) return null
 
   // We only store basic info locally now, the real source of truth is the backend
   const users = getItem(STORAGE_KEYS.USERS, [])
