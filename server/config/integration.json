@@ -1,4 +1,4 @@
 {
-  "mattermost_ws_url": "https://mattermost.o2h.com/visibly/threads",
+  "mattermost_ws_url": "wss://mattermost.o2h.com/api/v4/websocket",
   "mmauthtoken": "bkcndwmiwib7bc6mj5d8tejjcc"
 }

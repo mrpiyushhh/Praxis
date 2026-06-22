@@ -18,6 +18,7 @@ import { addNewTask } from './features/tasks.js'
 import { createProject } from './features/projects.js'
 
 import { triggerConfetti, showToast, PROJECT_COLORS, restartMainContentAnimations, getLocalDateString } from './utils/helpers.js'
+import { apiGet, apiPost } from './core/storage.js'
 
 // --- App state ---
 let currentUser = null
@@ -404,14 +405,7 @@ function wireAppEvents() {
     const mattermost_ws_url = document.getElementById('integration-ws-url-input')?.value || '';
     const mmauthtoken = document.getElementById('integration-token-input')?.value || '';
     
-    fetch('/api/tasks/external/config', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ mattermost_ws_url, mmauthtoken })
-    })
-      .then(res => res.json())
+    apiPost('/tasks/external/config', { mattermost_ws_url, mmauthtoken })
       .then(result => {
         if (result.success) {
           showToast('Mattermost configuration saved!');
@@ -632,8 +626,7 @@ function showProfileModal() {
   }
 
   // Fetch and populate current configuration
-  fetch('/api/tasks/external/config')
-    .then(res => res.json())
+  apiGet('/tasks/external/config')
     .then(config => {
       const urlInput = document.getElementById('integration-ws-url-input')
       const tokenInput = document.getElementById('integration-token-input')
