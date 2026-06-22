@@ -22,35 +22,38 @@ export function setState(newState) {
 }
 
 export async function loadUserData(userId) {
-  try {
-    const projects = await apiGet(`/projects/${userId}`)
-    const allTasks = await apiGet(`/tasks/${userId}`)
+  const key = getUserDataKey(userId)
 
-    state.projects = projects
-    state.tasks = {}
+  // 1. Hydrate from local cache IMMEDIATELY — zero wait
+  const cached = getItem(key, { projects: [], tasks: {} })
+  state.projects = cached.projects || []
+  state.tasks = cached.tasks || {}
 
-    // Group tasks by project
-    allTasks.forEach(task => {
-      if (!state.tasks[task.projectId]) {
-        state.tasks[task.projectId] = []
-      }
-      state.tasks[task.projectId].push(task)
+  // 2. Sync from API in the background — update and re-render when done
+  apiGet(`/projects/${userId}`)
+    .then(projects => apiGet(`/tasks/${userId}`).then(allTasks => ({ projects, allTasks })))
+    .then(({ projects, allTasks }) => {
+      state.projects = projects
+      state.tasks = {}
+
+      allTasks.forEach(task => {
+        if (!state.tasks[task.projectId]) state.tasks[task.projectId] = []
+        state.tasks[task.projectId].push(task)
+      })
+
+      state.projects.forEach(p => {
+        if (!state.tasks[p.id]) state.tasks[p.id] = []
+      })
+
+      saveState()
+      // Refresh the UI silently with the latest server data
+      window.dispatchEvent(new CustomEvent('praxis-refresh'))
+    })
+    .catch(err => {
+      console.warn('[State] Background API sync failed, using cached data:', err)
     })
 
-    // Ensure all projects have a task list entry
-    state.projects.forEach(p => {
-      if (!state.tasks[p.id]) state.tasks[p.id] = []
-    })
-
-    return state
-  } catch (err) {
-    console.error('[State] Failed to load user data from API, falling back to local storage', err)
-    const key = getUserDataKey(userId)
-    const data = getItem(key, { projects: [], tasks: {} })
-    state = data
-    if (!state.tasks) state.tasks = {}
-    return state
-  }
+  return state
 }
 
 export function saveState() {

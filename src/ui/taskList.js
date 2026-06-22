@@ -44,10 +44,9 @@ export function renderTasksList() {
   container.innerHTML = ''
 
   if (projectId === 'urgent') {
-    // Only add the entrance animation when first switching into focus view
-    const isFirstRender = container.dataset.view !== 'urgent'
+    // No stagger on the focus container — show cards immediately
     container.dataset.view = 'urgent'
-    container.className = 'grid grid-cols-1 lg:grid-cols-3 gap-5' + (isFirstRender ? ' stagger-6' : '')
+    container.className = 'grid grid-cols-1 lg:grid-cols-3 gap-5'
     renderTimeGroupedTasks(container, filtered)
   } else {
     const isFirstRender = container.dataset.view !== projectId

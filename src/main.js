@@ -55,7 +55,7 @@ async function initializeAuth() {
 
   if (currentUser) {
     toggleAuthUI(true)
-    await loadUserData(currentUser.id)
+    await loadUserData(currentUser.id)  // Returns instantly from cache; API sync runs in background
     startApplication()
   } else {
     toggleAuthUI(false)
